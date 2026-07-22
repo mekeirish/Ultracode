@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+<html lang="fr"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hubcode Ultra - Repository Manager</title>
@@ -525,9 +523,13 @@
         }
     </style>
 
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="./manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4b6cb7">
-<link rel="apple-touch-icon" href="icon.png"></head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon.png">
+</head>
 <body>
 
 <div id="toastContainer" class="toast-container"></div>
@@ -1120,9 +1122,7 @@
                 addLog(logRepo, "Fichier récupéré", 'success');
             } else if (getResp.status === 404) {
                 addLog(logRepo, "index.html introuvable, création d'un fichier minimal", 'warning');
-                originalHtml = `<!DOCTYPE html><html><head><title>${repo}</title></head><body><h1>${repo}</h1>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
-</body></html>`;
+                originalHtml = `<!DOCTYPE html><html><head><title>${repo}</title></head><body><h1>${repo}</h1></body></html>`;
                 currentSha = null;
             } else {
                 throw new Error(`HTTP ${getResp.status}`);
@@ -1442,5 +1442,15 @@
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(e => console.log("SW not available")));
     }
 </script>
-</body>
-</html>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker enregistré !'))
+        .catch(err => console.error('Erreur SW :', err));
+    });
+  }
+</script>
+</body></html>
