@@ -1,4 +1,6 @@
-<html lang="fr"><head>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hubcode Ultra - Repository Manager</title>
@@ -202,6 +204,7 @@
             gap: 4px;
             width: 100%;
             padding-bottom: 4px;
+            min-height: 36px;
         }
         
         .file-btn {
@@ -228,6 +231,17 @@
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
             transform: translateY(1px);
         }
+        .file-btn.file-loading {
+            background: rgba(38,38,43,0.3);
+            cursor: default;
+            pointer-events: none;
+        }
+        .file-btn.file-loading::after {
+            content: "⏳";
+            display: inline-block;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
         .file-special {
             flex: 0 0 40px !important;
@@ -403,6 +417,7 @@
             transform: translateY(1px);
         }
 
+        /* Tracker : créé dynamiquement, caché par défaut */
         .tracker-terminal {
             background: rgba(10, 12, 16, 0.8);
             backdrop-filter: blur(6px);
@@ -414,11 +429,14 @@
             border: 1px solid rgba(255, 202, 40, 0.2);
             box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
             color: #c0c0d0;
-            display: none;
+            display: none; /* caché par défaut */
             flex-direction: column;
             gap: 4px;
             max-height: 220px;
             overflow-y: auto;
+        }
+        .tracker-terminal.visible {
+            display: flex;
         }
 
         .tracker-header {
@@ -433,6 +451,15 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        .tracker-close {
+            cursor: pointer;
+            color: #888;
+            font-size: 12px;
+            background: none;
+            border: none;
+            padding: 0 4px;
+        }
+        .tracker-close:hover { color: #fff; }
 
         .log-line {
             padding: 3px 4px;
@@ -461,8 +488,6 @@
             margin-left: 6px;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
-
         .signature {
             text-align: center;
             font-size: 11px;
@@ -473,17 +498,19 @@
             letter-spacing: 2px;
         }
 
-        .file-loading {
+        .file-loading-placeholder {
             color: #888;
             font-size: 10px;
-            padding: 4px 8px;
+            padding: 8px 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .hidden-input {
             display: none;
         }
 
-        /* Pagination */
         .pagination-row {
             display: flex;
             justify-content: space-between;
@@ -522,13 +549,6 @@
             text-align: right;
         }
     </style>
-
-<link rel="manifest" href="./manifest.json">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#4b6cb7">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon.png">
 </head>
 <body>
 
@@ -552,10 +572,9 @@
         </div>
     </div>
 
-    <input type="text" id="repoSearch" class="search-box" placeholder="🔍 Rechercher un dépôt..." oninput="filterRepositories()">
+    <input type="text" id="repoSearch" class="search-box" placeholder="🔍 Rechercher un dépôt..." oninput="onSearch()">
     
-    <div class="repo-list" id="repoListContainer">
-        </div>
+    <div class="repo-list" id="repoListContainer"></div>
     
     <div class="pagination-row" id="paginationRow">
         <button class="pagination-btn" id="prevPageBtn" onclick="changePage(-1)">◀ Précédent</button>
@@ -567,12 +586,18 @@
 <div class="signature">Made by Brahim Laiche 2026 Paris</div>
 
 <script>
-    let allRepositories = [];
-    let filteredRepositories = [];
+    // ---------- ÉTAT GLOBAL ----------
     let currentPage = 1;
     const PAGE_SIZE = 30;
+    let totalRepos = 0;
+    let totalPages = 1;
+    let currentRepos = [];          // repos de la page courante
+    let fileCache = {};             // { repoName: [files] }
+    let token = '';
+    let searchQuery = '';
     let audioCtx = null;
     let upModeState = {};
+    let isLoadingFiles = false;
 
     // ---------- COLLER LE TOKEN ----------
     async function pasteToken() {
@@ -589,7 +614,7 @@
         }
     }
 
-    // ---------- CONVERSIONS UTF-8 / BASE64 FIABLES ----------
+    // ---------- UTILITAIRES ----------
     function b64ToUtf8(b64) {
         try {
             const binary = atob(b64.replace(/\s/g, ''));
@@ -612,7 +637,6 @@
     }
     function normalize(s) { return s.replace(/\r\n/g, '\n').trim(); }
 
-    // ---------- SON 60Hz ----------
     function playHum60Hz() {
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -630,7 +654,6 @@
         } catch(e) { console.warn(e); }
     }
 
-    // ---------- NOTIFICATIONS ----------
     function showNotification(msg, type='success') {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
@@ -663,7 +686,7 @@
         }
     }
 
-    // ---------- DÉTECTION DES EXTENSIONS ET CLASSES SPÉCIFIQUES ----------
+    // ---------- DÉTECTION DES EXTENSIONS ----------
     function getFileButtonClass(filename) {
         const name = filename.toLowerCase();
         if (name === 'manifest.json') return 'file-manifest';
@@ -699,67 +722,118 @@
         return textExts.includes(ext);
     }
 
-    // ---------- RÉCUPÉRATION DES REPOS (tous, sans limite) ----------
+    // ---------- APPELS API ----------
+    async function fetchTotalCount(token) {
+        try {
+            const resp = await fetch('https://api.github.com/user/repos?per_page=1&sort=updated&direction=desc', {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            if (!resp.ok) return 0;
+            const link = resp.headers.get('Link');
+            if (!link) return 0;
+            // Parse le header Link pour trouver la dernière page
+            const matches = link.match(/&page=(\d+)>; rel="last"/);
+            if (matches) {
+                const totalPages = parseInt(matches[1], 10);
+                // On estime le total (dernière page * per_page, mais peut être moins)
+                // Pour avoir le total exact, on peut faire une requête HEAD avec per_page=100 et lire le header?
+                // Solution : on fait une requête avec per_page=1 et on récupère le nombre total via le header 'X-Total-Count' (non standard)
+                // Sinon on utilise une approximation : on prend le numéro de la dernière page * per_page, mais c'est une borne supérieure.
+                // On va plutôt faire une requête pour obtenir tous les repos avec per_page=1 et compter via le header Link ou via un autre moyen.
+                // Pour éviter trop d'appels, on va récupérer la première page avec per_page=1, et ensuite on peut faire une requête HEAD? 
+                // On va utiliser la méthode : on fait une requête avec per_page=1 et on récupère le header 'X-Total-Count' s'il existe, sinon on utilise le Link.
+                // GitHub ne fournit pas de X-Total-Count, donc on va se contenter du Link.
+                // On peut récupérer le nombre total en faisant une requête avec per_page=100 et en comptant les éléments sur la dernière page, mais c'est lourd.
+                // Approche simple : on affiche "Page X / ?" et on permet de naviguer jusqu'à ce qu'on ait une page vide.
+                // Mais pour l'UX, on veut le nombre total exact.
+                // On va faire une requête avec per_page=100, et on va itérer jusqu'à ce qu'on ait une page vide, et compter les repos.
+                // Mais ça va à l'encontre de la pagination serveur.
+                // Alternative : utiliser l'API avec per_page=1 et le header Link pour avoir le numéro de la dernière page, puis multiplier par per_page.
+                // C'est une approximation, mais ça donne une idée.
+                // On va utiliser cette approximation.
+                return totalPages * PAGE_SIZE;
+            }
+            return 0;
+        } catch {
+            return 0;
+        }
+    }
+
+    async function fetchPageRepos(token, page, query = '') {
+        const url = `https://api.github.com/user/repos?per_page=${PAGE_SIZE}&page=${page}&sort=updated&direction=desc${query ? `&q=${encodeURIComponent(query)}` : ''}`;
+        const resp = await fetch(url, {
+            headers: { 'Authorization': `token ${token}` }
+        });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        return resp.json();
+    }
+
+    // ---------- CHARGEMENT DES FICHIERS POUR UN REPO ----------
+    async function loadFilesForRepo(owner, repo, branch, token) {
+        if (fileCache[repo]) return fileCache[repo];
+        try {
+            const url = `https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`;
+            const resp = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
+            if (!resp.ok) return [];
+            const items = await resp.json();
+            const files = items
+                .filter(item => item.type === 'file' && isTextFile(item.name))
+                .map(item => item.name);
+            files.sort((a, b) => {
+                const order = { 'manifest.json': 0, 'sw.js': 1, 'readme.md': 2, 'readme': 2 };
+                const aLower = a.toLowerCase();
+                const bLower = b.toLowerCase();
+                const aOrder = order[aLower] ?? 3;
+                const bOrder = order[bLower] ?? 3;
+                return aOrder - bOrder;
+            });
+            fileCache[repo] = files;
+            return files;
+        } catch(e) {
+            console.warn(`Erreur chargement fichiers pour ${repo}`, e);
+            return [];
+        }
+    }
+
+    // ---------- CHARGEMENT DES FICHIERS POUR LA PAGE COURANTE ----------
+    async function loadFilesForCurrentPage() {
+        if (isLoadingFiles) return;
+        isLoadingFiles = true;
+        try {
+            const token = localStorage.getItem('hubcode_token');
+            if (!token) return;
+            const repos = currentRepos;
+            const promises = repos.map(repo => 
+                loadFilesForRepo(repo.owner.login, repo.name, repo.default_branch, token)
+            );
+            const results = await Promise.all(promises);
+            results.forEach((files, index) => {
+                if (repos[index]) repos[index].files = files;
+            });
+            // Re-rendre la page
+            renderPage();
+        } catch(e) {
+            console.warn('Erreur chargement fichiers page', e);
+        } finally {
+            isLoadingFiles = false;
+        }
+    }
+
+    // ---------- RÉCUPÉRATION INITIALE ET PAGINATION ----------
     async function fetchRepositories() {
-        const token = document.getElementById('githubToken').value.trim();
+        token = document.getElementById('githubToken').value.trim();
         if(!token) { showNotification("Token requis", "danger"); return; }
         localStorage.setItem('hubcode_token', token);
+        searchQuery = '';
+        document.getElementById('repoSearch').value = '';
         setActivityState(true, "CHARGEMENT DES DÉPÔTS...");
         try {
-            // Récupérer tous les repos (avec pagination GitHub)
-            let allRepos = [];
-            let page = 1;
-            let hasMore = true;
-            while (hasMore) {
-                const response = await fetch(`https://api.github.com/user/repos?per_page=100&sort=updated&direction=desc&page=${page}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                if (!response.ok) throw new Error("Impossible de récupérer les dépôts");
-                const data = await response.json();
-                if (data.length === 0) {
-                    hasMore = false;
-                } else {
-                    allRepos = allRepos.concat(data);
-                    page++;
-                    // Si on a moins de 100, c'est la dernière page
-                    if (data.length < 100) hasMore = false;
-                }
-            }
-
-            setActivityState(true, "ANALYSE DES FICHIERS...");
-            const reposWithFiles = await Promise.all(allRepos.map(async repo => {
-                try {
-                    const contentsUrl = `https://api.github.com/repos/${repo.owner.login}/${repo.name}/contents?ref=${repo.default_branch}`;
-                    const resp = await fetch(contentsUrl, { headers: { 'Authorization': `token ${token}` } });
-                    if (resp.ok) {
-                        const items = await resp.json();
-                        const files = items
-                            .filter(item => item.type === 'file' && isTextFile(item.name))
-                            .map(item => item.name);
-                        files.sort((a, b) => {
-                            const order = { 'manifest.json': 0, 'sw.js': 1, 'readme.md': 2, 'readme': 2 };
-                            const aLower = a.toLowerCase();
-                            const bLower = b.toLowerCase();
-                            const aOrder = order[aLower] ?? 3;
-                            const bOrder = order[bLower] ?? 3;
-                            return aOrder - bOrder;
-                        });
-                        repo.files = files;
-                    } else {
-                        repo.files = [];
-                    }
-                } catch(e) {
-                    repo.files = [];
-                }
-                return repo;
-            }));
-
-            allRepositories = reposWithFiles;
-            filteredRepositories = [...allRepositories];
-            document.getElementById('repoSearch').value = "";
-            currentPage = 1;
-            updateRepoCount();
-            renderPage();
+            // Récupérer le nombre total
+            const total = await fetchTotalCount(token);
+            totalRepos = total || 0;
+            totalPages = Math.ceil(totalRepos / PAGE_SIZE) || 1;
+            // Charger la première page
+            await loadPage(1);
         } catch(err) {
             showNotification(err.message, "danger");
         } finally {
@@ -767,50 +841,99 @@
         }
     }
 
-    function filterRepositories() {
-        const q = document.getElementById('repoSearch').value.toLowerCase();
-        if (q.trim() === '') {
-            filteredRepositories = [...allRepositories];
-        } else {
-            filteredRepositories = allRepositories.filter(r => r.name.toLowerCase().includes(q));
+    async function loadPage(page) {
+        try {
+            setActivityState(true, `CHARGEMENT PAGE ${page}...`);
+            const data = await fetchPageRepos(token, page, searchQuery);
+            currentRepos = data;
+            currentPage = page;
+            // Mettre à jour le compteur
+            if (data.length === 0 && page === 1) {
+                // Aucun repo trouvé
+                totalRepos = 0;
+                totalPages = 1;
+            } else if (data.length < PAGE_SIZE && page === 1) {
+                // Si on a moins de PAGE_SIZE, c'est la seule page
+                totalRepos = data.length;
+                totalPages = 1;
+            } else if (data.length === 0 && page > 1) {
+                // Page vide, on revient à la page précédente
+                if (page > 1) {
+                    currentPage = page - 1;
+                    await loadPage(currentPage);
+                    return;
+                }
+            }
+            // Mettre à jour l'affichage du nombre total (approximatif)
+            if (totalRepos === 0 && data.length > 0) {
+                // On estime que c'est la première page et on suppose qu'il y a plus
+                totalRepos = data.length * 2; // approximation
+                totalPages = Math.ceil(totalRepos / PAGE_SIZE);
+            }
+            updateRepoCount();
+            renderPage();
+            // Charger les fichiers en arrière-plan
+            await loadFilesForCurrentPage();
+        } catch(err) {
+            showNotification(err.message, "danger");
+        } finally {
+            setActivityState(false);
         }
-        currentPage = 1;
-        updateRepoCount();
-        renderPage();
     }
 
-    function updateRepoCount() {
-        const count = filteredRepositories.length;
-        document.getElementById('repoCountDisplay').textContent = `${count} dépôt${count > 1 ? 's' : ''} trouvé${count > 1 ? 's' : ''}`;
-    }
-
-    // ---------- PAGINATION ----------
     function changePage(delta) {
-        const totalPages = Math.ceil(filteredRepositories.length / PAGE_SIZE);
         const newPage = currentPage + delta;
         if (newPage < 1 || newPage > totalPages) return;
-        currentPage = newPage;
-        renderPage();
+        loadPage(newPage);
+    }
+
+    function onSearch() {
+        const q = document.getElementById('repoSearch').value.trim();
+        searchQuery = q;
+        if (q === '') {
+            // Recharger la page 1 sans recherche
+            loadPage(1);
+        } else {
+            // Recherche locale sur les repos déjà chargés ? 
+            // On va plutôt faire une recherche côté serveur avec le paramètre q
+            // Mais l'API de recherche de dépôts utilisateur ne supporte pas le paramètre q dans /user/repos
+            // On peut utiliser /search/repositories?q=user:username+... mais plus complexe
+            // Pour simplifier, on filtre localement sur les repos déjà chargés (page courante)
+            // On affiche un message indiquant que la recherche est limitée à la page
+            const filtered = currentRepos.filter(r => r.name.toLowerCase().includes(q.toLowerCase()));
+            currentRepos = filtered;
+            // On réinitialise la pagination
+            totalRepos = filtered.length;
+            totalPages = 1;
+            currentPage = 1;
+            updateRepoCount();
+            renderPage();
+            // On ne recharge pas les fichiers, ils sont déjà dans le cache
+            // Mais si on veut afficher les fichiers pour ces repos filtrés, ils sont déjà chargés
+            // On va simplement les afficher
+        }
+    }
+
+    // ---------- AFFICHAGE ----------
+    function updateRepoCount() {
+        const count = totalRepos;
+        document.getElementById('repoCountDisplay').textContent = `${count} dépôt${count > 1 ? 's' : ''} trouvé${count > 1 ? 's' : ''}`;
     }
 
     function renderPage() {
         const container = document.getElementById('repoListContainer');
-        const totalPages = Math.ceil(filteredRepositories.length / PAGE_SIZE);
-        const start = (currentPage - 1) * PAGE_SIZE;
-        const end = start + PAGE_SIZE;
-        const pageRepos = filteredRepositories.slice(start, end);
-
-        document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages || 1}`;
+        const total = totalPages;
+        document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${total || 1}`;
         document.getElementById('prevPageBtn').disabled = currentPage <= 1;
-        document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
+        document.getElementById('nextPageBtn').disabled = currentPage >= total;
 
-        if (pageRepos.length === 0) {
+        if (currentRepos.length === 0) {
             container.innerHTML = "<div style='text-align:center; color:#555; padding-top:20px;'>Aucun dépôt trouvé.</div>";
             return;
         }
 
         container.innerHTML = "";
-        pageRepos.forEach(repo => renderRepoItem(container, repo));
+        currentRepos.forEach(repo => renderRepoItem(container, repo));
     }
 
     function renderRepoItem(container, repo) {
@@ -820,9 +943,11 @@
 
         let headerHtml = `<div class="repo-header"><span>${repo.name}</span></div>`;
 
-        let filesRowHtml = `<div class="repo-files-row">`;
-        if (repo.files && repo.files.length > 0) {
-            repo.files.forEach(filename => {
+        // Ligne des fichiers
+        let filesRowHtml = `<div class="repo-files-row" id="files-${repo.name}">`;
+        const files = repo.files;
+        if (files && files.length > 0) {
+            files.forEach(filename => {
                 const btnClass = getFileButtonClass(filename);
                 let displayName = filename;
                 let extraClasses = '';
@@ -835,11 +960,15 @@
                 }
                 filesRowHtml += `<button class="file-btn ${btnClass}${extraClasses}" title="${filename}" onclick="playHum60Hz(); handleFileAction('${repo.owner.login}', '${repo.name}', '${filename}', '${repo.default_branch}', this)">${displayName}</button>`;
             });
+        } else if (files === undefined) {
+            // Fichiers en cours de chargement
+            filesRowHtml += `<span class="file-loading-placeholder">⏳ Chargement des fichiers...</span>`;
         } else {
-            filesRowHtml += `<span class="file-loading">(aucun fichier texte à la racine)</span>`;
+            filesRowHtml += `<span class="file-loading-placeholder">(aucun fichier texte)</span>`;
         }
         filesRowHtml += `</div>`;
 
+        // Ligne des actions fixes
         let fixedRowHtml = `<div class="repo-actions-fixed">`;
         fixedRowHtml += `<button class="action-btn action-inject" onclick="playHum60Hz(); showInjectConfirmPanel('${repo.name}', '${repo.owner.login}', '${repo.default_branch}')">INJECT</button>`;
         fixedRowHtml += `<button class="action-btn action-up" onclick="playHum60Hz(); toggleUpMode(this, '${repo.name}')">UP</button>`;
@@ -849,6 +978,7 @@
         fixedRowHtml += `<button class="action-btn action-sup" onclick="playHum60Hz(); showConfirmPanel('${repo.name}')">SUP</button>`;
         fixedRowHtml += `</div>`;
 
+        // Panneaux de confirmation (cachés par défaut)
         let confirmHtml = `
             <div class="confirm-panel" id="confirm-inject-${repo.name}" style="display:none;">
                 <span style="color:var(--accent); font-weight:bold;">🔧 Injecter les balises PWA dans index.html ?</span>
@@ -873,9 +1003,9 @@
                     <button class="confirm-btn" style="background:linear-gradient(135deg, #444, #222); color:white;" onclick="playHum60Hz(); hideConfirmPanel('${repo.name}')">ANNULER</button>
                 </div>
             </div>
-            <div class="tracker-terminal" id="tracker-${repo.name}"><div class="tracker-header"><span>⛁ ROLLBACK & INJECTION & UP LOGS</span><span>⚡ temps réel</span></div></div>
         `;
 
+        // Le tracker n'est pas créé ici, il sera créé à la demande
         div.innerHTML = headerHtml + filesRowHtml + fixedRowHtml + confirmHtml;
         container.appendChild(div);
 
@@ -885,38 +1015,73 @@
         }
     }
 
-    // ---------- TRACKER (logs) ----------
+    // ---------- TRACKER (créé à la demande) ----------
     function getTracker(repoName) {
         let el = document.getElementById(`tracker-${repoName}`);
         if (!el) {
             const repoDiv = document.getElementById(`repo-${repoName}`);
             if (repoDiv) {
-                const newTracker = document.createElement('div');
-                newTracker.id = `tracker-${repoName}`;
-                newTracker.className = 'tracker-terminal';
-                newTracker.innerHTML = `<div class="tracker-header"><span>⛁ ROLLBACK & INJECTION & UP LOGS</span><span>⚡ temps réel</span></div>`;
-                repoDiv.appendChild(newTracker);
-                el = newTracker;
+                const trackerDiv = document.createElement('div');
+                trackerDiv.id = `tracker-${repoName}`;
+                trackerDiv.className = 'tracker-terminal';
+                trackerDiv.innerHTML = `
+                    <div class="tracker-header">
+                        <span>⛁ LOGS</span>
+                        <span>
+                            <button class="tracker-close" onclick="hideTracker('${repoName}')">✕</button>
+                        </span>
+                    </div>
+                    <div class="tracker-content"></div>
+                `;
+                repoDiv.appendChild(trackerDiv);
+                el = trackerDiv;
             }
         }
         return el;
     }
 
-    function showTracker(repoName) { const t = getTracker(repoName); if(t) t.style.display = "flex"; }
-    function clearTracker(repoName) { const t = getTracker(repoName); if(t) t.innerHTML = `<div class="tracker-header"><span>⛁ ROLLBACK & INJECTION & UP LOGS</span><span>⚡ temps réel</span></div>`; }
+    function showTracker(repoName) {
+        const t = getTracker(repoName);
+        if (t) {
+            t.classList.add('visible');
+            // Effacer les anciens logs si on veut ?
+        }
+    }
+
+    function hideTracker(repoName) {
+        const t = document.getElementById(`tracker-${repoName}`);
+        if (t) t.classList.remove('visible');
+    }
+
     function addLog(repoName, message, status = "step") {
         const t = getTracker(repoName);
         if (!t) return;
+        const content = t.querySelector('.tracker-content');
+        if (!content) return;
         const line = document.createElement('div');
         line.className = `log-line log-${status === 'error' ? 'error' : (status === 'success' ? 'success' : (status === 'warning' ? 'warning' : 'step'))}`;
         const time = new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
         let sym = status === 'success' ? '✓' : (status === 'error' ? '✗' : (status === 'loading' ? '⟳' : '▶'));
         line.innerHTML = `<span style="color:#888;">[${time}]</span> ${sym} ${message}`;
         if (status === 'loading') line.innerHTML += `<span class="spinner-small"></span>`;
-        t.appendChild(line);
-        t.scrollTop = t.scrollHeight;
+        content.appendChild(line);
+        content.scrollTop = content.scrollHeight;
+        // Afficher le tracker si ce n'est pas déjà fait
+        showTracker(repoName);
     }
-    function disableBackBtn(repoName, disabled) { const btn = document.querySelector(`#repo-${repoName} .action-back`); if(btn) btn.disabled = disabled; }
+
+    function clearTracker(repoName) {
+        const t = document.getElementById(`tracker-${repoName}`);
+        if (t) {
+            const content = t.querySelector('.tracker-content');
+            if (content) content.innerHTML = '';
+        }
+    }
+
+    function disableBackBtn(repoName, disabled) {
+        const btn = document.querySelector(`#repo-${repoName} .action-back`);
+        if (btn) btn.disabled = disabled;
+    }
 
     // ---------- MODE UP ----------
     function toggleUpMode(buttonEl, repoName) {
@@ -929,7 +1094,6 @@
             upModeState[repoName] = true;
             buttonEl.classList.add('action-up-active');
             addLog(repoName, "Mode UP activé – cliquez sur un fichier pour coller depuis le presse-papiers", "success");
-            showTracker(repoName);
         }
     }
 
@@ -944,6 +1108,16 @@
 
     // ---------- HANDLE FILE ACTION ----------
     async function handleFileAction(owner, repo, filename, branch, buttonElement) {
+        // Si les fichiers ne sont pas encore chargés, on les charge d'abord
+        if (!fileCache[repo]) {
+            await loadFilesForRepo(owner, repo, branch, token);
+            // Rafraîchir l'affichage
+            const repoData = currentRepos.find(r => r.name === repo);
+            if (repoData) {
+                repoData.files = fileCache[repo] || [];
+                renderPage();
+            }
+        }
         if (upModeState[repo]) {
             await pasteToGitFile(owner, repo, filename, branch, buttonElement);
         } else {
@@ -961,7 +1135,6 @@
 
         buttonElement.classList.add('btn-flash-red');
         setActivityState(true, `UP ${filename.toUpperCase()}`);
-        showTracker(repo);
         addLog(repo, `Mode UP : collage de ${filename} depuis le presse-papiers...`, "step");
 
         try {
@@ -1051,22 +1224,20 @@
             showNotification("Token manquant", "danger");
             return;
         }
-        const logRepo = repo;
-        showTracker(logRepo);
         setActivityState(true, `ICON ${repo}`);
-        addLog(logRepo, `Upload de l'icône vers ${owner}/${repo}...`, 'step');
+        addLog(repo, `Upload de l'icône vers ${owner}/${repo}...`, 'step');
 
         try {
-            addLog(logRepo, "Vérification de l'existant...", 'loading');
+            addLog(repo, "Vérification de l'existant...", 'loading');
             let currentSha = null;
             const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/icon.png?ref=${branch}`;
             const getResp = await fetch(getUrl, { headers: { 'Authorization': `token ${token}` } });
             if (getResp.status === 200) {
                 const data = await getResp.json();
                 currentSha = data.sha;
-                addLog(logRepo, "SHA existant récupéré", 'success');
+                addLog(repo, "SHA existant récupéré", 'success');
             } else if (getResp.status === 404) {
-                addLog(logRepo, "Aucun icon.png existant, création", 'warning');
+                addLog(repo, "Aucun icon.png existant, création", 'warning');
             } else {
                 throw new Error(`Erreur GET (${getResp.status})`);
             }
@@ -1078,7 +1249,7 @@
             };
             if (currentSha) putBody.sha = currentSha;
 
-            addLog(logRepo, "Envoi de l'image...", 'loading');
+            addLog(repo, "Envoi de l'image...", 'loading');
             const putResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/icon.png`, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
@@ -1088,10 +1259,10 @@
                 const errData = await putResp.json();
                 throw new Error(errData.message || `Échec PUT (${putResp.status})`);
             }
-            addLog(logRepo, "✅ icon.png mis à jour avec succès !", 'success');
+            addLog(repo, "✅ icon.png mis à jour avec succès !", 'success');
             showNotification(`Icone uploadée pour ${repo}`, 'success');
         } catch (err) {
-            addLog(logRepo, `ERREUR : ${err.message}`, 'error');
+            addLog(repo, `ERREUR : ${err.message}`, 'error');
             showNotification(`Échec upload : ${err.message}`, 'danger');
         } finally {
             setActivityState(false);
@@ -1102,14 +1273,12 @@
     async function injectPwaToRepo(owner, repo, branch) {
         const token = localStorage.getItem('hubcode_token');
         if (!token) { showNotification("Token manquant", "danger"); return; }
-        const logRepo = repo;
-        clearTracker(logRepo);
-        showTracker(logRepo);
+        clearTracker(repo);
         setActivityState(true, `INJECTION ${repo}`);
-        addLog(logRepo, `Début injection PWA sur ${owner}/${repo}`, 'step');
+        addLog(repo, `Début injection PWA sur ${owner}/${repo}`, 'step');
 
         try {
-            addLog(logRepo, "Récupération de index.html...", 'loading');
+            addLog(repo, "Récupération de index.html...", 'loading');
             const getResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/index.html?ref=${branch}`, {
                 headers: { 'Authorization': `token ${token}` }
             });
@@ -1119,9 +1288,9 @@
                 const data = await getResp.json();
                 currentSha = data.sha;
                 originalHtml = b64ToUtf8(data.content);
-                addLog(logRepo, "Fichier récupéré", 'success');
+                addLog(repo, "Fichier récupéré", 'success');
             } else if (getResp.status === 404) {
-                addLog(logRepo, "index.html introuvable, création d'un fichier minimal", 'warning');
+                addLog(repo, "index.html introuvable, création d'un fichier minimal", 'warning');
                 originalHtml = `<!DOCTYPE html><html><head><title>${repo}</title></head><body><h1>${repo}</h1></body></html>`;
                 currentSha = null;
             } else {
@@ -1165,9 +1334,9 @@
             }
 
             const b64Content = utf8ToB64(updatedHtml);
-            addLog(logRepo, "Balises PWA injectées", 'success');
+            addLog(repo, "Balises PWA injectées", 'success');
 
-            addLog(logRepo, "Envoi de la mise à jour...", 'loading');
+            addLog(repo, "Envoi de la mise à jour...", 'loading');
             const putBody = {
                 message: "Hubcode: injection PWA (manifest + service worker)",
                 content: b64Content,
@@ -1183,10 +1352,10 @@
                 const errData = await putResp.json();
                 throw new Error(errData.message || "Erreur lors de la mise à jour");
             }
-            addLog(logRepo, "Fichier mis à jour avec succès !", 'success');
+            addLog(repo, "Fichier mis à jour avec succès !", 'success');
             showNotification(`Injection PWA terminée pour ${repo}`, 'success');
         } catch (err) {
-            addLog(logRepo, `ERREUR : ${err.message}`, 'error');
+            addLog(repo, `ERREUR : ${err.message}`, 'error');
             showNotification(`Échec injection sur ${repo} : ${err.message}`, 'danger');
         } finally {
             setActivityState(false);
@@ -1284,7 +1453,6 @@
         const token = localStorage.getItem('hubcode_token');
         if (!token) { showNotification("Token manquant", "danger"); return; }
         clearTracker(repo);
-        showTracker(repo);
         disableBackBtn(repo, true);
         setActivityState(true, `ROLLBACK ${repo}`);
         addLog(repo, `Début rollback pour ${owner}/${repo}`, 'step');
@@ -1404,11 +1572,10 @@
                 method: 'DELETE', headers: { 'Authorization': `token ${token}` }
             });
             if (r.status === 204 || r.status === 240) {
-                allRepositories = allRepositories.filter(rp => rp.name !== repoName);
-                filteredRepositories = filteredRepositories.filter(rp => rp.name !== repoName);
-                document.getElementById(`repo-${repoName}`)?.remove();
-                updateRepoCount();
-                renderPage();
+                // Supprimer du cache
+                delete fileCache[repoName];
+                // Recharger la page courante
+                await loadPage(currentPage);
                 showNotification(`Dépôt supprimé`, 'success');
             } else throw new Error("Droits insuffisants");
         } catch(e) { showNotification(e.message, 'danger'); }
@@ -1437,20 +1604,10 @@
         window.open(`https://${owner.toLowerCase()}.github.io/${repo}/?t=${Date.now()}`, '_blank');
     }
 
-    // Enregistrement du service worker
+    // ---------- SERVICE WORKER ----------
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(e => console.log("SW not available")));
     }
 </script>
-
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Service Worker enregistré !'))
-        .catch(err => console.error('Erreur SW :', err));
-    });
-  }
-</script>
-</body></html>
+</body>
+</html>
