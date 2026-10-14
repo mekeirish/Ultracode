@@ -9,259 +9,108 @@
         :root {
             --bg-glass: rgba(30, 30, 34, 0.65);
             --card-border: rgba(255, 255, 255, 0.06);
-            --shadow-dark: rgba(0,0,0,0.5);
-            --shadow-light: rgba(255,255,255,0.02);
             --accent: #ffca28;
             --text: #c9d1d9;
             --danger: #f85149;
             --success: #7ee787;
             --blue: #58a6ff;
             --orange: #ffa726;
-            --up-color: #00cc88;
-            --view-color: #4d9eff;
             --green: #4ade80;
             --purple: #b388ff;
         }
-        
         body {
-            background: #1e1e22;
-            color: var(--text);
+            background: #1e1e22; color: var(--text);
             font-family: -apple-system, system-ui, sans-serif;
-            padding: 15px;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            padding: 15px; margin: 0;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
-        
         .card {
             background: var(--bg-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            padding: 20px;
-            border-radius: 16px;
+            padding: 20px; border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
             margin-bottom: 20px;
         }
-        
         h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-top: 0; }
-        
-        .token-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin: 8px 0;
-        }
-        .token-row input {
-            flex: 1;
-            margin: 0;
-        }
+        .token-row { display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+        .token-row input { flex: 1; margin: 0; }
         .token-row .paste-btn {
-            flex: 0 0 auto;
-            padding: 10px 16px;
-            border-radius: 12px;
-            border: none;
-            background: rgba(43, 43, 49, 0.7);
-            backdrop-filter: blur(4px);
-            color: var(--text);
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.1s ease;
-            white-space: nowrap;
+            flex: 0 0 auto; padding: 10px 16px; border-radius: 12px; border: none;
+            background: rgba(43, 43, 49, 0.7); color: var(--text); font-weight: bold;
+            cursor: pointer; font-size: 12px; text-transform: uppercase; white-space: nowrap;
         }
-        .token-row .paste-btn:active {
-            transform: scale(0.95);
-        }
-        
+        .token-row .paste-btn:active { transform: scale(0.95); }
         input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px);
-            color: white;
-            box-sizing: border-box;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
-            outline: none;
-            font-size: 13px;
-            border: 1px solid rgba(255,255,255,0.05);
+            width: 100%; padding: 14px; border-radius: 12px; border: none;
+            background: rgba(0,0,0,0.3); color: white;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5); outline: none;
+            font-size: 13px; border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .search-box {
-            margin: 12px 0 4px 0;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
+        .search-box { margin: 12px 0 4px 0; }
         .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            left: 20px;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 9999;
-            pointer-events: none;
+            position: fixed; bottom: 20px; right: 20px; left: 20px; max-width: 400px;
+            display: flex; flex-direction: column; gap: 8px; z-index: 9999; pointer-events: none;
         }
-
-        @media (min-width: 440px) {
-            .toast-container {
-                left: auto;
-                width: 360px;
-            }
-        }
-
+        @media (min-width: 440px) { .toast-container { left: auto; width: 360px; } }
         .internal-toast {
             pointer-events: auto;
             background: rgba(22, 22, 26, 0.85);
             backdrop-filter: blur(8px);
             border-left: 4px solid var(--accent);
-            border-radius: 8px;
-            padding: 14px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #fff;
-            letter-spacing: 0.5px;
+            border-radius: 8px; padding: 14px; font-size: 12px; font-weight: bold;
+            color: #fff; letter-spacing: 0.5px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             animation: slideIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
         .internal-toast.success-toast { border-left-color: var(--success); }
         .internal-toast.danger-toast { border-left-color: var(--danger); }
-
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(20px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        
         button.btn {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
+            width: 100%; padding: 15px; border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: all 0.1s ease;
-            background: rgba(43, 43, 49, 0.7);
-            backdrop-filter: blur(4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
+            font-weight: bold; cursor: pointer; margin-top: 8px;
+            background: rgba(43, 43, 49, 0.7); color: var(--text);
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        
-        button.btn:active {
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
-            transform: translateY(1px);
-        }
-        
+        button.btn:active { transform: translateY(1px); }
         .yellow-btn { color: var(--accent); border-bottom: 2px solid rgba(255, 202, 40, 0.3) !important; }
-        .red-btn { color: var(--danger); border-bottom: 2px solid rgba(248, 81, 73, 0.3) !important; }
-        
-        .repo-list {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
+        .repo-list { margin-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .repo-item {
             background: var(--bg-glass);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            padding: 14px;
-            border-radius: 14px;
+            padding: 14px; border-radius: 14px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: flex; flex-direction: column; gap: 10px;
         }
-        
-        .repo-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: #fff;
-        }
-        
-        .repo-files-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            width: 100%;
-            padding-bottom: 4px;
-            min-height: 36px;
-        }
-        
+        .repo-header { display: flex; align-items: center; justify-content: space-between;
+            font-weight: bold; font-size: 0.9rem; color: #fff; }
+        .repo-files-row { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; min-height: 36px; }
         .file-btn {
-            flex: 1 0 80px;
-            max-width: 140px;
-            padding: 10px 4px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            background: rgba(38, 38, 43, 0.7);
-            backdrop-filter: blur(4px);
-            color: var(--text);
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            text-align: center;
-            transition: all 0.05s ease;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            flex: 1 0 80px; max-width: 140px;
+            padding: 10px 4px; border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 8px; background: rgba(38, 38, 43, 0.7);
+            color: var(--text); font-size: 10px; font-weight: bold;
+            text-transform: uppercase; cursor: pointer; text-align: center;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            -webkit-user-select: none; user-select: none;
+            -webkit-touch-callout: none; touch-action: manipulation;
         }
-        .file-btn:active {
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-            transform: translateY(1px);
-        }
-        .file-btn.file-loading {
-            background: rgba(38,38,43,0.3);
-            cursor: default;
-            pointer-events: none;
-        }
-        .file-btn.file-loading::after {
-            content: "⏳";
-            display: inline-block;
-            animation: spin 0.8s linear infinite;
-        }
+        .file-btn:active { transform: translateY(1px); }
+        .file-btn.file-loading { background: rgba(38,38,43,0.3); pointer-events: none; }
+        .file-btn.file-loading::after { content: "⏳"; display: inline-block; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
         .file-special {
-            flex: 0 0 40px !important;
-            max-width: 40px !important;
+            flex: 0 0 40px !important; max-width: 40px !important;
             padding: 10px 0 !important;
             background: rgba(255, 255, 255, 0.08) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.05) !important;
-            font-size: 9px !important;
-            letter-spacing: 0.5px !important;
-            transition: all 0.15s ease !important;
+            font-size: 9px !important; letter-spacing: 0.5px !important;
         }
-        .file-special:hover {
-            background: rgba(255, 255, 255, 0.15) !important;
-            transform: scale(1.05);
-        }
-        .file-special:active {
-            transform: scale(0.95) !important;
-        }
-        
         .file-manifest { color: var(--danger); border-bottom: 2px solid rgba(248, 81, 73, 0.5); }
         .file-sw       { color: #ffd93d; border-bottom: 2px solid rgba(255, 217, 61, 0.5); }
         .file-readme   { color: var(--purple); border-bottom: 2px solid rgba(179, 136, 255, 0.5); }
@@ -272,282 +121,267 @@
         .file-txt      { color: #b0b0c0; border-bottom: 2px solid rgba(200, 200, 200, 0.15); }
         .file-md       { color: #6c8cff; border-bottom: 2px solid rgba(108, 140, 255, 0.3); }
         .file-xml      { color: #ff8a65; border-bottom: 2px solid rgba(255, 138, 101, 0.3); }
+        .file-svg      { color: #ff9d3d; border-bottom: 2px solid rgba(255, 157, 61, 0.5); }
         .file-yml      { color: #a29bfe; border-bottom: 2px solid rgba(162, 155, 254, 0.3); }
         .file-toml     { color: #81ecec; border-bottom: 2px solid rgba(129, 236, 236, 0.3); }
         .file-sh       { color: #55efc4; border-bottom: 2px solid rgba(85, 239, 196, 0.3); }
         .file-py       { color: #74b9ff; border-bottom: 2px solid rgba(116, 185, 255, 0.3); }
         .file-rb       { color: #ff7675; border-bottom: 2px solid rgba(255, 118, 117, 0.3); }
         .file-php      { color: #a29bfe; border-bottom: 2px solid rgba(162, 155, 254, 0.3); }
-        .file-other    { color: #b0b0c0; border-bottom: 2px solid rgba(200, 200, 200, 0.15); }
+        .file-other    { color: #d0d0e0; border-bottom: 2px solid rgba(220, 220, 240, 0.25); background: rgba(50, 48, 58, 0.7); }
 
+        /* ====== BARRE D'ACTIONS : 7 BOUTONS SANS SCROLL HORIZONTAL ====== */
         .repo-actions-fixed {
             display: flex;
             flex-wrap: nowrap;
-            gap: 4px;
+            gap: 2px;
             width: 100%;
             padding-top: 8px;
             border-top: 1px solid rgba(255,255,255,0.06);
-            overflow-x: auto;
+            overflow: hidden;
         }
-        
         .action-btn {
             flex: 1 1 0;
-            min-width: 40px;
-            max-width: 90px;
-            padding: 8px 2px;
+            min-width: 0;
+            max-width: none;
+            padding: 9px 1px;
             border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
+            border-radius: 7px;
             background: rgba(50, 50, 58, 0.7);
-            backdrop-filter: blur(4px);
             color: #f0f0f5;
-            font-size: 8px;
+            font-size: 7.5px;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             text-align: center;
-            transition: all 0.1s ease;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.4);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .action-btn:active {
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-            transform: translateY(1px);
-        }
-
-        .action-inject {
-            color: #ffdd99;
-            border-color: rgba(255, 202, 40, 0.4);
-            background: rgba(60, 50, 30, 0.6);
-        }
-        .action-up {
-            color: #b0f0d0;
-            border-color: rgba(0, 204, 136, 0.5);
-            background: rgba(20, 60, 50, 0.5);
-            box-shadow: 0 0 16px rgba(0, 204, 136, 0.15);
-        }
-        .action-up-active {
-            background: #00cc88 !important;
-            color: #111 !important;
-            border-color: transparent !important;
-            box-shadow: 0 0 30px rgba(0, 204, 136, 0.5) !important;
-            text-shadow: 0 1px 2px rgba(255,255,255,0.3);
-        }
-        .action-view {
-            color: #b0d0ff;
-            border-color: rgba(77, 158, 255, 0.4);
-            background: rgba(30, 50, 80, 0.5);
-            box-shadow: 0 0 16px rgba(77, 158, 255, 0.12);
-        }
-        .action-back {
-            color: #ffc08a;
-            border-color: rgba(255, 167, 38, 0.4);
-            background: rgba(60, 45, 25, 0.5);
-        }
-        .action-sup {
-            color: #ff8a8a;
-            border-color: rgba(248, 81, 73, 0.4);
-            background: rgba(60, 25, 25, 0.5);
-        }
-        .action-icon {
-            color: #c9b0ff;
-            border-color: rgba(170, 130, 255, 0.4);
-            background: rgba(50, 30, 60, 0.5);
-            box-shadow: 0 0 16px rgba(170, 130, 255, 0.08);
+        .action-btn:active { transform: translateY(1px); }
+        .action-inject { color: #ffdd99; border-color: rgba(255, 202, 40, 0.4); background: rgba(60, 50, 30, 0.6); }
+        .action-up { color: #b0f0d0; border-color: rgba(0, 204, 136, 0.5); background: rgba(20, 60, 50, 0.5); }
+        .action-up-active { background: #00cc88 !important; color: #111 !important; }
+        .action-view { color: #b0d0ff; border-color: rgba(77, 158, 255, 0.4); background: rgba(30, 50, 80, 0.5); }
+        .action-back { color: #ffc08a; border-color: rgba(255, 167, 38, 0.4); background: rgba(60, 45, 25, 0.5); }
+        .action-sup { color: #ff8a8a; border-color: rgba(248, 81, 73, 0.4); background: rgba(60, 25, 25, 0.5); }
+        .action-icon { color: #c9b0ff; border-color: rgba(170, 130, 255, 0.4); background: rgba(50, 30, 60, 0.5); }
+        .action-new {
+            color: #ffb8e0;
+            border-color: rgba(255, 122, 198, 0.55);
+            background: rgba(60, 22, 45, 0.55);
+            box-shadow: 0 0 16px rgba(255, 122, 198, 0.12);
         }
 
-        .btn-flash-red {
-            animation: flashRed 0.5s infinite !important;
-        }
+        .btn-flash-red { animation: flashRed 0.5s infinite !important; }
         @keyframes flashRed {
-            0% { background: rgba(38,38,43,0.7); box-shadow: none; color: var(--text); }
-            50% { background: #f85149; box-shadow: 0 0 15px #f85149; color: white; border-color: #f85149; }
-            100% { background: rgba(38,38,43,0.7); box-shadow: none; color: var(--text); }
+            0% { background: rgba(38,38,43,0.7); color: var(--text); }
+            50% { background: #f85149; color: white; }
+            100% { background: rgba(38,38,43,0.7); color: var(--text); }
         }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
         .dot-idle { background: var(--success); box-shadow: 0 0 8px var(--success); }
         .dot-active { background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: blink 0.8s infinite alternate; }
-        
         @keyframes blink { from { opacity: 0.4; } to { opacity: 1; } }
-        
         .confirm-panel {
             background: rgba(26, 26, 29, 0.8);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--danger);
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 8px;
-            display: none;
-            flex-direction: column;
-            gap: 8px;
-            text-align: center;
-            font-size: 12px;
+            border: 1px solid var(--danger); border-radius: 12px;
+            padding: 12px; margin-top: 8px;
+            display: none; flex-direction: column; gap: 8px;
+            text-align: center; font-size: 12px;
         }
-        
-        .confirm-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
+        .confirm-buttons { display: flex; gap: 10px; }
         .confirm-btn {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 7px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 11px;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            transition: all 0.05s ease;
+            flex: 1; padding: 10px; border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 7px; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; font-size: 11px; background: rgba(0,0,0,0.3);
         }
-
-        .confirm-btn:active {
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-            transform: translateY(1px);
-        }
-
-        /* Tracker : créé dynamiquement, caché par défaut */
         .tracker-terminal {
             background: rgba(10, 12, 16, 0.8);
-            backdrop-filter: blur(6px);
-            border-radius: 12px;
-            margin-top: 12px;
-            padding: 10px;
-            font-family: 'SF Mono', 'Monaco', monospace;
-            font-size: 10px;
+            border-radius: 12px; margin-top: 12px; padding: 10px;
+            font-family: monospace; font-size: 10px;
             border: 1px solid rgba(255, 202, 40, 0.2);
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
-            color: #c0c0d0;
-            display: none; /* caché par défaut */
-            flex-direction: column;
-            gap: 4px;
-            max-height: 220px;
-            overflow-y: auto;
+            color: #c0c0d0; display: none; flex-direction: column;
+            gap: 4px; max-height: 220px; overflow-y: auto;
         }
-        .tracker-terminal.visible {
-            display: flex;
-        }
-
+        .tracker-terminal.visible { display: flex; }
         .tracker-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #2a2a32;
-            padding-bottom: 4px;
-            margin-bottom: 6px;
-            font-weight: bold;
-            font-size: 9px;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid #2a2a32; padding-bottom: 4px; margin-bottom: 6px;
+            font-weight: bold; font-size: 9px; color: var(--accent); text-transform: uppercase;
         }
-        .tracker-close {
-            cursor: pointer;
-            color: #888;
-            font-size: 12px;
-            background: none;
-            border: none;
-            padding: 0 4px;
-        }
-        .tracker-close:hover { color: #fff; }
-
-        .log-line {
-            padding: 3px 4px;
-            border-radius: 5px;
-            background: rgba(17, 18, 23, 0.6);
-            word-break: break-word;
-            font-size: 10px;
-            font-family: monospace;
-            border-left: 2px solid transparent;
-        }
-
+        .tracker-close { cursor: pointer; color: #888; font-size: 12px; background: none; border: none; }
+        .log-line { padding: 3px 4px; border-radius: 5px; background: rgba(17, 18, 23, 0.6); word-break: break-word; font-size: 10px; font-family: monospace; border-left: 2px solid transparent; }
         .log-success { color: var(--success); border-left-color: var(--success); }
         .log-error { color: var(--danger); border-left-color: var(--danger); }
         .log-step { color: var(--blue); border-left-color: var(--blue); }
         .log-warning { color: var(--orange); border-left-color: var(--orange); }
-
         .spinner-small {
-            display: inline-block;
-            width: 9px;
-            height: 9px;
+            display: inline-block; width: 9px; height: 9px;
             border: 1.5px solid rgba(255,202,40,0.3);
             border-top: 1.5px solid var(--accent);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            vertical-align: middle;
-            margin-left: 6px;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+            vertical-align: middle; margin-left: 6px;
         }
-
-        .signature {
-            text-align: center;
-            font-size: 11px;
-            color: #555;
-            margin-top: auto;
-            padding-top: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .file-loading-placeholder {
-            color: #888;
-            font-size: 10px;
-            padding: 8px 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hidden-input {
-            display: none;
-        }
-
-        .pagination-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            gap: 8px;
-        }
+        .signature { text-align: center; font-size: 11px; color: #555; margin-top: auto; padding-top: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        .file-loading-placeholder { color: #888; font-size: 10px; padding: 8px 4px; }
+        .hidden-input { display: none; }
+        .pagination-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 8px; }
         .pagination-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(43, 43, 49, 0.7); color: var(--text);
+            font-weight: bold; cursor: pointer; font-size: 11px; text-transform: uppercase;
+        }
+        .pagination-btn:active { transform: scale(0.95); }
+        .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .pagination-info { font-size: 12px; color: #888; }
+        .repo-count { font-size: 12px; color: #888; margin-top: 4px; text-align: right; }
+
+        /* ============ MODALE ÉDITEUR ============ */
+        .editor-modal {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.78);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 10000; align-items: center; justify-content: center; padding: 12px;
+        }
+        .editor-modal.visible { display: flex; }
+        .editor-panel {
+            background: rgba(30, 30, 34, 0.97);
+            border: 1px solid var(--card-border);
+            border-radius: 16px; padding: 12px;
+            width: 100%; max-width: 760px; height: 92vh;
+            display: flex; flex-direction: column; gap: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        }
+        .editor-header {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 12px; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent);
+            gap: 10px; flex-shrink: 0;
+        }
+        .editor-header .editor-title {
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            max-width: 65%;
+        }
+        .editor-header .editor-status { font-size: 10px; color: #888; text-transform: none; }
+
+        /* Barre de recherche */
+        .editor-searchbar {
+            display: flex; align-items: center; gap: 5px;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 5px 7px;
+            flex-shrink: 0;
+        }
+        .editor-searchbar:focus-within {
+            border-color: rgba(255, 202, 40, 0.5);
+            box-shadow: 0 0 0 2px rgba(255, 202, 40, 0.1);
+        }
+        .editor-search-icon { font-size: 12px; color: #888; padding-left: 2px; }
+        .editor-searchbar input {
+            flex: 1; padding: 4px 2px; border: none;
+            background: transparent; color: #fff;
+            font-size: 13px; outline: none;
+            box-shadow: none; border-radius: 0;
+            min-width: 0; width: auto;
+        }
+        .editor-search-count {
+            font-size: 11px; color: #888;
+            font-family: 'SF Mono', monospace;
+            min-width: 46px; text-align: center;
+            letter-spacing: 0; font-weight: bold;
+            padding: 0 4px;
+            transition: color 0.15s;
+        }
+        .editor-nav-btn {
+            background: rgba(60, 60, 68, 0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #ccc; width: 28px; height: 28px;
+            border-radius: 7px; cursor: pointer;
+            font-size: 11px; display: flex;
+            align-items: center; justify-content: center;
+            padding: 0; transition: all 0.1s;
+            flex-shrink: 0;
+        }
+        .editor-nav-btn:hover { background: rgba(80, 80, 90, 0.7); color: #fff; }
+        .editor-nav-btn:active { transform: scale(0.9); }
+        .editor-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .editor-search-close { color: #888; }
+        .editor-search-close:hover { color: #f85149; background: rgba(80, 30, 30, 0.6); }
+
+        /* Zone éditeur avec overlay */
+        .editor-textarea-wrap {
+            flex: 1; position: relative;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.55);
+            overflow: auto;
+            min-height: 0;
+        }
+        .editor-highlight, #editorTextarea {
+            padding: 12px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+            border: none; margin: 0;
+            tab-size: 4;
+            letter-spacing: 0;
+            min-height: 100%;
+        }
+        .editor-highlight {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            color: transparent;
+            pointer-events: none;
+            z-index: 1;
+            user-select: none;
+        }
+        .editor-highlight mark {
+            background: rgba(255, 202, 40, 0.28);
+            color: transparent;
+            border-radius: 2px;
+            padding: 0;
+        }
+        .editor-highlight mark.current {
+            background: #ffca28;
+            box-shadow: 0 0 0 1px #b88a00, 0 0 10px rgba(255, 202, 40, 0.7);
+        }
+        #editorTextarea {
+            position: relative;
+            width: 100%;
+            background: transparent;
+            color: #e6edf3;
+            caret-color: #ffca28;
+            resize: none;
+            outline: none;
+            z-index: 2;
+            display: block;
+            overflow: hidden;
+        }
+        #editorTextarea::selection {
+            background: rgba(255, 202, 40, 0.35);
+            color: #fff;
+        }
+        #editorTextarea:disabled { opacity: 0.5; }
+
+        .editor-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .editor-btn {
+            flex: 1; padding: 12px; border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(43, 43, 49, 0.7);
-            backdrop-filter: blur(4px);
-            color: var(--text);
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.1s ease;
-            font-size: 11px;
-            text-transform: uppercase;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+            font-size: 12px; cursor: pointer; transition: all 0.1s;
         }
-        .pagination-btn:active {
-            transform: scale(0.95);
-        }
-        .pagination-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        .pagination-info {
-            font-size: 12px;
-            color: #888;
-        }
-        .repo-count {
-            font-size: 12px;
-            color: #888;
-            margin-top: 4px;
-            text-align: right;
-        }
+        .editor-btn:active { transform: scale(0.97); }
+        .editor-save { background: linear-gradient(135deg, #4ade80, #16a34a); color: #111; border-color: transparent; }
+        .editor-save:disabled { opacity: 0.5; cursor: not-allowed; }
+        .editor-close { background: rgba(50, 50, 58, 0.7); color: #ccc; }
     </style>
 </head>
 <body>
@@ -571,11 +405,8 @@
             <span class="status-dot dot-idle" id="globalStatus"></span> <span id="statusText">PRÊT</span>
         </div>
     </div>
-
     <input type="text" id="repoSearch" class="search-box" placeholder="🔍 Rechercher un dépôt..." oninput="onSearch()">
-    
     <div class="repo-list" id="repoListContainer"></div>
-    
     <div class="pagination-row" id="paginationRow">
         <button class="pagination-btn" id="prevPageBtn" onclick="changePage(-1)">◀ Précédent</button>
         <span class="pagination-info" id="pageInfo">Page 1 / 1</span>
@@ -585,14 +416,93 @@
 
 <div class="signature">Made by Brahim Laiche 2026 Paris</div>
 
+<!-- ============ MODALE ÉDITEUR ============ -->
+<div id="editorModal" class="editor-modal">
+    <div class="editor-panel">
+        <div class="editor-header">
+            <span class="editor-title" id="editorTitle">Fichier</span>
+            <span class="editor-status" id="editorStatus"></span>
+        </div>
+
+        <div class="editor-searchbar">
+            <span class="editor-search-icon">🔍</span>
+            <input type="text" id="editorSearchInput" placeholder="Rechercher dans le fichier..."
+                   autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off">
+            <span class="editor-search-count" id="editorSearchCount">0/0</span>
+            <button class="editor-nav-btn" id="editorPrevBtn" title="Occurrence précédente (Maj+Entrée)">▲</button>
+            <button class="editor-nav-btn" id="editorNextBtn" title="Occurrence suivante (Entrée)">▼</button>
+            <button class="editor-nav-btn editor-search-close" id="editorSearchCloseBtn" title="Effacer (Échap)">✕</button>
+        </div>
+
+        <div class="editor-textarea-wrap" id="editorTextareaWrap">
+            <div class="editor-highlight" id="editorHighlight"></div>
+            <textarea id="editorTextarea" spellcheck="false" autocomplete="off"
+                      autocapitalize="off" autocorrect="off" wrap="soft"></textarea>
+        </div>
+
+        <div class="editor-actions">
+            <button class="editor-btn editor-save" id="editorSaveBtn" onclick="saveEditor()">💾 Enregistrer</button>
+            <button class="editor-btn editor-close" onclick="closeEditor()">✕ Fermer</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ MODALE NOUVEAU FICHIER ============ -->
+<div id="newFileModal" class="editor-modal">
+    <div class="editor-panel" style="height: auto; max-height: 90vh;">
+        <div class="editor-header">
+            <span class="editor-title" id="newFileTitle">Nouveau fichier</span>
+            <span class="editor-status" id="newFileStatus"></span>
+        </div>
+
+        <div style="display: flex; gap: 8px; flex-shrink: 0;">
+            <input type="text" id="newFileName" placeholder="Nom (ex: app)"
+                   style="flex: 2; min-width: 0;" autocomplete="off"
+                   spellcheck="false" autocapitalize="off">
+            <input type="text" id="newFileExt" placeholder=".html" list="newFileExtList"
+                   style="flex: 1; min-width: 0;" autocomplete="off"
+                   spellcheck="false" autocapitalize="off">
+            <datalist id="newFileExtList">
+                <option value=".html"></option><option value=".htm"></option>
+                <option value=".css"></option><option value=".js"></option>
+                <option value=".mjs"></option><option value=".json"></option>
+                <option value=".md"></option><option value=".txt"></option>
+                <option value=".svg"></option><option value=".xml"></option>
+                <option value=".yml"></option><option value=".yaml"></option>
+                <option value=".toml"></option><option value=".ini"></option>
+                <option value=".sh"></option><option value=".py"></option>
+                <option value=".php"></option><option value=".rb"></option>
+                <option value=".sql"></option><option value=".csv"></option>
+            </datalist>
+        </div>
+
+        <textarea id="newFileContent" spellcheck="false" autocomplete="off"
+                  autocapitalize="off" autocorrect="off"
+                  placeholder="Contenu du fichier..."
+                  style="flex: 1; min-height: 220px; max-height: 55vh; padding: 12px;
+                         border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);
+                         background: rgba(0,0,0,0.55); color: #e6edf3;
+                         font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+                         font-size: 12px; line-height: 1.5; resize: none; outline: none;
+                         white-space: pre; overflow: auto; box-sizing: border-box;"></textarea>
+
+        <div class="editor-actions">
+            <button class="editor-btn editor-save" id="newFileSaveBtn" onclick="saveNewFile()">💾 Enregistrer</button>
+            <button class="editor-btn editor-close" onclick="closeNewFileModal()">✕ Fermer</button>
+        </div>
+    </div>
+</div>
+
 <script>
     // ---------- ÉTAT GLOBAL ----------
     let currentPage = 1;
     const PAGE_SIZE = 30;
     let totalRepos = 0;
     let totalPages = 1;
-    let currentRepos = [];          // repos de la page courante
-    let fileCache = {};             // { repoName: [files] }
+    let allRepos = [];
+    let filteredRepos = [];
+    let currentRepos = [];
+    let fileCache = {};
     let token = '';
     let searchQuery = '';
     let audioCtx = null;
@@ -606,12 +516,8 @@
             if (text) {
                 document.getElementById('githubToken').value = text.trim();
                 showNotification("Token collé !", "success");
-            } else {
-                showNotification("Presse-papiers vide", "danger");
-            }
-        } catch (err) {
-            showNotification("Impossible de lire le presse-papiers", "danger");
-        }
+            } else showNotification("Presse-papiers vide", "danger");
+        } catch (err) { showNotification("Impossible de lire le presse-papiers", "danger"); }
     }
 
     // ---------- UTILITAIRES ----------
@@ -621,9 +527,7 @@
             const bytes = new Uint8Array(binary.length);
             for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
             return new TextDecoder('utf-8').decode(bytes);
-        } catch(e) {
-            return decodeURIComponent(escape(atob(b64.replace(/\s/g, ''))));
-        }
+        } catch(e) { return decodeURIComponent(escape(atob(b64.replace(/\s/g, '')))); }
     }
     function utf8ToB64(str) {
         try {
@@ -631,11 +535,12 @@
             let binary = '';
             for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
             return btoa(binary);
-        } catch(e) {
-            return btoa(unescape(encodeURIComponent(str)));
-        }
+        } catch(e) { return btoa(unescape(encodeURIComponent(str))); }
     }
     function normalize(s) { return s.replace(/\r\n/g, '\n').trim(); }
+    function escapeHtml(s) {
+        return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
 
     function playHum60Hz() {
         try {
@@ -643,15 +548,12 @@
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.value = 60;
+            osc.type = 'sine'; osc.frequency.value = 60;
             gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.3);
-        } catch(e) { console.warn(e); }
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        } catch(e) {}
     }
 
     function showNotification(msg, type='success') {
@@ -686,7 +588,25 @@
         }
     }
 
-    // ---------- DÉTECTION DES EXTENSIONS ----------
+    // ---------- DÉTECTION DES FICHIERS ----------
+    const BINARY_EXTS = new Set([
+        'png','jpg','jpeg','gif','webp','ico','bmp','tiff','tif','avif','heic','heif','jfif','pjpeg',
+        'mp3','mp4','wav','ogg','flac','m4a','aac','mov','avi','mkv','webm','wmv','flv','3gp',
+        'zip','rar','7z','tar','gz','bz2','xz','tgz','lz','lzma','cab',
+        'pdf','exe','dll','so','dylib','bin','iso','dmg','msi','apk','ipa','jar','class','o','a','lib','obj',
+        'woff','woff2','ttf','otf','eot','ttc',
+        'psd','ai','sketch','fig','xd','afdesign','afphoto',
+        'db','sqlite','sqlite3','mdb','dat','pak','bin'
+    ]);
+
+    function isDisplayableFile(filename) {
+        if (filename.startsWith('.')) return true;
+        const parts = filename.split('.');
+        if (parts.length === 1) return true;
+        const ext = parts.pop().toLowerCase();
+        return !BINARY_EXTS.has(ext);
+    }
+
     function getFileButtonClass(filename) {
         const name = filename.toLowerCase();
         if (name === 'manifest.json') return 'file-manifest';
@@ -694,132 +614,91 @@
         if (name === 'readme.md' || name === 'readme') return 'file-readme';
         if (name === 'index.html') return 'file-html';
         if (name === 'style.css') return 'file-css';
-        
-        const ext = filename.split('.').pop().toLowerCase();
+        const parts = filename.split('.');
+        const ext = parts.length > 1 ? parts.pop().toLowerCase() : '';
         const map = {
-            'html': 'file-html',
-            'htm': 'file-html',
-            'css': 'file-css',
-            'js': 'file-js',
-            'json': 'file-json',
-            'txt': 'file-txt',
-            'md': 'file-md',
-            'xml': 'file-xml',
-            'yml': 'file-yml',
-            'yaml': 'file-yml',
-            'toml': 'file-toml',
-            'sh': 'file-sh',
-            'py': 'file-py',
-            'rb': 'file-rb',
-            'php': 'file-php'
+            'html':'file-html','htm':'file-html','xhtml':'file-html','vue':'file-html','svelte':'file-html','astro':'file-html',
+            'css':'file-css','scss':'file-css','sass':'file-css','less':'file-css','styl':'file-css',
+            'js':'file-js','mjs':'file-js','cjs':'file-js','jsx':'file-js','ts':'file-js','tsx':'file-js',
+            'json':'file-json','json5':'file-json','jsonc':'file-json',
+            'txt':'file-txt','log':'file-txt','env':'file-txt','gitignore':'file-txt','dockerignore':'file-txt','npmignore':'file-txt',
+            'md':'file-md','markdown':'file-md','mdx':'file-md',
+            'xml':'file-xml','xsd':'file-xml','xsl':'file-xml','xslt':'file-xml','plist':'file-xml',
+            'svg':'file-svg',
+            'yml':'file-yml','yaml':'file-yml',
+            'toml':'file-toml','ini':'file-toml','cfg':'file-toml','conf':'file-toml',
+            'sh':'file-sh','bash':'file-sh','zsh':'file-sh','fish':'file-sh','ps1':'file-sh','bat':'file-sh','cmd':'file-sh',
+            'py':'file-py','pyw':'file-py','pyi':'file-py',
+            'rb':'file-rb',
+            'php':'file-php','phtml':'file-php',
+            'go':'file-py','rs':'file-py','swift':'file-py','kt':'file-py','kts':'file-py','dart':'file-py','lua':'file-py','pl':'file-py',
+            'c':'file-js','cpp':'file-js','cc':'file-js','cxx':'file-js','h':'file-js','hpp':'file-js','hxx':'file-js',
+            'cs':'file-py','java':'file-py','scala':'file-py','groovy':'file-py',
+            'sql':'file-yml','graphql':'file-yml','gql':'file-yml',
+            'dockerfile':'file-sh','makefile':'file-sh','cmake':'file-sh',
+            'gitattributes':'file-txt','editorconfig':'file-txt'
         };
         return map[ext] || 'file-other';
     }
 
-    function isTextFile(filename) {
-        const ext = filename.split('.').pop().toLowerCase();
-        const textExts = ['html', 'htm', 'css', 'js', 'json', 'txt', 'md', 'xml', 'yml', 'yaml', 'toml', 'sh', 'py', 'rb', 'php'];
-        return textExts.includes(ext);
-    }
-
-    // ---------- APPELS API ----------
-    async function fetchTotalCount(token) {
-        try {
-            const resp = await fetch('https://api.github.com/user/repos?per_page=1&sort=updated&direction=desc', {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            if (!resp.ok) return 0;
-            const link = resp.headers.get('Link');
-            if (!link) return 0;
-            // Parse le header Link pour trouver la dernière page
-            const matches = link.match(/&page=(\d+)>; rel="last"/);
-            if (matches) {
-                const totalPages = parseInt(matches[1], 10);
-                // On estime le total (dernière page * per_page, mais peut être moins)
-                // Pour avoir le total exact, on peut faire une requête HEAD avec per_page=100 et lire le header?
-                // Solution : on fait une requête avec per_page=1 et on récupère le nombre total via le header 'X-Total-Count' (non standard)
-                // Sinon on utilise une approximation : on prend le numéro de la dernière page * per_page, mais c'est une borne supérieure.
-                // On va plutôt faire une requête pour obtenir tous les repos avec per_page=1 et compter via le header Link ou via un autre moyen.
-                // Pour éviter trop d'appels, on va récupérer la première page avec per_page=1, et ensuite on peut faire une requête HEAD? 
-                // On va utiliser la méthode : on fait une requête avec per_page=1 et on récupère le header 'X-Total-Count' s'il existe, sinon on utilise le Link.
-                // GitHub ne fournit pas de X-Total-Count, donc on va se contenter du Link.
-                // On peut récupérer le nombre total en faisant une requête avec per_page=100 et en comptant les éléments sur la dernière page, mais c'est lourd.
-                // Approche simple : on affiche "Page X / ?" et on permet de naviguer jusqu'à ce qu'on ait une page vide.
-                // Mais pour l'UX, on veut le nombre total exact.
-                // On va faire une requête avec per_page=100, et on va itérer jusqu'à ce qu'on ait une page vide, et compter les repos.
-                // Mais ça va à l'encontre de la pagination serveur.
-                // Alternative : utiliser l'API avec per_page=1 et le header Link pour avoir le numéro de la dernière page, puis multiplier par per_page.
-                // C'est une approximation, mais ça donne une idée.
-                // On va utiliser cette approximation.
-                return totalPages * PAGE_SIZE;
+    // ---------- API ----------
+    async function fetchAllRepos(token, onProgress) {
+        const all = [];
+        let page = 1;
+        while (true) {
+            const url = `https://api.github.com/user/repos?per_page=100&page=${page}&sort=updated&direction=desc`;
+            const resp = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
+            if (!resp.ok) {
+                if (resp.status === 401) throw new Error("Token invalide ou expiré");
+                if (resp.status === 403) throw new Error("Limite API atteinte ou droits insuffisants");
+                throw new Error(`HTTP ${resp.status}`);
             }
-            return 0;
-        } catch {
-            return 0;
+            const data = await resp.json();
+            if (!Array.isArray(data) || data.length === 0) break;
+            all.push(...data);
+            if (onProgress) onProgress(all.length);
+            if (data.length < 100) break;
+            page++;
         }
+        return all;
     }
 
-    async function fetchPageRepos(token, page, query = '') {
-        const url = `https://api.github.com/user/repos?per_page=${PAGE_SIZE}&page=${page}&sort=updated&direction=desc${query ? `&q=${encodeURIComponent(query)}` : ''}`;
-        const resp = await fetch(url, {
-            headers: { 'Authorization': `token ${token}` }
-        });
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        return resp.json();
-    }
-
-    // ---------- CHARGEMENT DES FICHIERS POUR UN REPO ----------
     async function loadFilesForRepo(owner, repo, branch, token) {
         if (fileCache[repo]) return fileCache[repo];
         try {
-            const url = `https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`;
-            const resp = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
+            const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`,
+                { headers: { 'Authorization': `token ${token}` } });
             if (!resp.ok) return [];
             const items = await resp.json();
             const files = items
-                .filter(item => item.type === 'file' && isTextFile(item.name))
+                .filter(item => item.type === 'file' && isDisplayableFile(item.name))
                 .map(item => item.name);
             files.sort((a, b) => {
                 const order = { 'manifest.json': 0, 'sw.js': 1, 'readme.md': 2, 'readme': 2 };
-                const aLower = a.toLowerCase();
-                const bLower = b.toLowerCase();
-                const aOrder = order[aLower] ?? 3;
-                const bOrder = order[bLower] ?? 3;
-                return aOrder - bOrder;
+                const aL = a.toLowerCase(), bL = b.toLowerCase();
+                const aO = order[aL] ?? 3, bO = order[bL] ?? 3;
+                if (aO !== bO) return aO - bO;
+                return aL.localeCompare(bL);
             });
             fileCache[repo] = files;
             return files;
-        } catch(e) {
-            console.warn(`Erreur chargement fichiers pour ${repo}`, e);
-            return [];
-        }
+        } catch(e) { return []; }
     }
 
-    // ---------- CHARGEMENT DES FICHIERS POUR LA PAGE COURANTE ----------
     async function loadFilesForCurrentPage() {
         if (isLoadingFiles) return;
         isLoadingFiles = true;
         try {
             const token = localStorage.getItem('hubcode_token');
             if (!token) return;
-            const repos = currentRepos;
-            const promises = repos.map(repo => 
-                loadFilesForRepo(repo.owner.login, repo.name, repo.default_branch, token)
-            );
+            const promises = currentRepos.map(repo =>
+                loadFilesForRepo(repo.owner.login, repo.name, repo.default_branch, token));
             const results = await Promise.all(promises);
-            results.forEach((files, index) => {
-                if (repos[index]) repos[index].files = files;
-            });
-            // Re-rendre la page
+            results.forEach((files, i) => { if (currentRepos[i]) currentRepos[i].files = files; });
             renderPage();
-        } catch(e) {
-            console.warn('Erreur chargement fichiers page', e);
-        } finally {
-            isLoadingFiles = false;
-        }
+        } catch(e) {} finally { isLoadingFiles = false; }
     }
 
-    // ---------- RÉCUPÉRATION INITIALE ET PAGINATION ----------
     async function fetchRepositories() {
         token = document.getElementById('githubToken').value.trim();
         if(!token) { showNotification("Token requis", "danger"); return; }
@@ -828,57 +707,28 @@
         document.getElementById('repoSearch').value = '';
         setActivityState(true, "CHARGEMENT DES DÉPÔTS...");
         try {
-            // Récupérer le nombre total
-            const total = await fetchTotalCount(token);
-            totalRepos = total || 0;
-            totalPages = Math.ceil(totalRepos / PAGE_SIZE) || 1;
-            // Charger la première page
-            await loadPage(1);
+            const all = await fetchAllRepos(token, (count) => setActivityState(true, `CHARGÉ ${count}...`));
+            allRepos = all; filteredRepos = allRepos;
+            totalRepos = allRepos.length;
+            totalPages = Math.max(1, Math.ceil(totalRepos / PAGE_SIZE));
+            currentPage = 1;
+            updateRepoCount();
+            loadPage(1);
+            showNotification(`${totalRepos} dépôts chargés`, "success");
         } catch(err) {
             showNotification(err.message, "danger");
-        } finally {
-            setActivityState(false);
-        }
+        } finally { setActivityState(false); }
     }
 
-    async function loadPage(page) {
-        try {
-            setActivityState(true, `CHARGEMENT PAGE ${page}...`);
-            const data = await fetchPageRepos(token, page, searchQuery);
-            currentRepos = data;
-            currentPage = page;
-            // Mettre à jour le compteur
-            if (data.length === 0 && page === 1) {
-                // Aucun repo trouvé
-                totalRepos = 0;
-                totalPages = 1;
-            } else if (data.length < PAGE_SIZE && page === 1) {
-                // Si on a moins de PAGE_SIZE, c'est la seule page
-                totalRepos = data.length;
-                totalPages = 1;
-            } else if (data.length === 0 && page > 1) {
-                // Page vide, on revient à la page précédente
-                if (page > 1) {
-                    currentPage = page - 1;
-                    await loadPage(currentPage);
-                    return;
-                }
-            }
-            // Mettre à jour l'affichage du nombre total (approximatif)
-            if (totalRepos === 0 && data.length > 0) {
-                // On estime que c'est la première page et on suppose qu'il y a plus
-                totalRepos = data.length * 2; // approximation
-                totalPages = Math.ceil(totalRepos / PAGE_SIZE);
-            }
-            updateRepoCount();
-            renderPage();
-            // Charger les fichiers en arrière-plan
-            await loadFilesForCurrentPage();
-        } catch(err) {
-            showNotification(err.message, "danger");
-        } finally {
-            setActivityState(false);
-        }
+    function loadPage(page) {
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+        currentPage = page;
+        const start = (page - 1) * PAGE_SIZE;
+        currentRepos = filteredRepos.slice(start, start + PAGE_SIZE);
+        updateRepoCount();
+        renderPage();
+        loadFilesForCurrentPage();
     }
 
     function changePage(delta) {
@@ -888,52 +738,78 @@
     }
 
     function onSearch() {
-        const q = document.getElementById('repoSearch').value.trim();
+        const q = document.getElementById('repoSearch').value.trim().toLowerCase();
         searchQuery = q;
-        if (q === '') {
-            // Recharger la page 1 sans recherche
-            loadPage(1);
-        } else {
-            // Recherche locale sur les repos déjà chargés ? 
-            // On va plutôt faire une recherche côté serveur avec le paramètre q
-            // Mais l'API de recherche de dépôts utilisateur ne supporte pas le paramètre q dans /user/repos
-            // On peut utiliser /search/repositories?q=user:username+... mais plus complexe
-            // Pour simplifier, on filtre localement sur les repos déjà chargés (page courante)
-            // On affiche un message indiquant que la recherche est limitée à la page
-            const filtered = currentRepos.filter(r => r.name.toLowerCase().includes(q.toLowerCase()));
-            currentRepos = filtered;
-            // On réinitialise la pagination
-            totalRepos = filtered.length;
-            totalPages = 1;
-            currentPage = 1;
-            updateRepoCount();
-            renderPage();
-            // On ne recharge pas les fichiers, ils sont déjà dans le cache
-            // Mais si on veut afficher les fichiers pour ces repos filtrés, ils sont déjà chargés
-            // On va simplement les afficher
-        }
+        filteredRepos = q === '' ? allRepos : allRepos.filter(r => r.name.toLowerCase().includes(q));
+        totalRepos = filteredRepos.length;
+        totalPages = Math.max(1, Math.ceil(totalRepos / PAGE_SIZE));
+        currentPage = 1;
+        updateRepoCount();
+        loadPage(1);
     }
 
-    // ---------- AFFICHAGE ----------
     function updateRepoCount() {
         const count = totalRepos;
-        document.getElementById('repoCountDisplay').textContent = `${count} dépôt${count > 1 ? 's' : ''} trouvé${count > 1 ? 's' : ''}`;
+        document.getElementById('repoCountDisplay').textContent =
+            `${count} dépôt${count > 1 ? 's' : ''} trouvé${count > 1 ? 's' : ''}`;
     }
 
     function renderPage() {
         const container = document.getElementById('repoListContainer');
-        const total = totalPages;
-        document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${total || 1}`;
+        document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages || 1}`;
         document.getElementById('prevPageBtn').disabled = currentPage <= 1;
-        document.getElementById('nextPageBtn').disabled = currentPage >= total;
-
+        document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
         if (currentRepos.length === 0) {
             container.innerHTML = "<div style='text-align:center; color:#555; padding-top:20px;'>Aucun dépôt trouvé.</div>";
             return;
         }
-
         container.innerHTML = "";
         currentRepos.forEach(repo => renderRepoItem(container, repo));
+    }
+
+    function createFileButton(owner, repo, filename, branch) {
+        const btnClass = getFileButtonClass(filename);
+        const lowerName = filename.toLowerCase();
+        let displayName = filename;
+        let extraClasses = '';
+        if (lowerName === 'manifest.json' || lowerName === 'sw.js' || lowerName === 'readme.md' || lowerName === 'readme') {
+            extraClasses = ' file-special';
+            if (lowerName === 'manifest.json') displayName = 'MF';
+            else if (lowerName === 'sw.js') displayName = 'SW';
+            else displayName = 'RD';
+        }
+        const btn = document.createElement('button');
+        btn.className = `file-btn ${btnClass}${extraClasses}`;
+        btn.title = filename + ' — clic: copier / appui long: éditer';
+        btn.textContent = displayName;
+
+        let pressTimer = null, longPressTriggered = false, startX = 0, startY = 0;
+        const cancel = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+        const start = (e) => {
+            longPressTriggered = false;
+            startX = e.clientX || 0; startY = e.clientY || 0;
+            cancel();
+            pressTimer = setTimeout(() => {
+                longPressTriggered = true;
+                playHum60Hz();
+                openEditor(owner, repo, filename, branch);
+            }, 550);
+        };
+        const move = (e) => {
+            if (Math.abs((e.clientX||0) - startX) > 10 || Math.abs((e.clientY||0) - startY) > 10) cancel();
+        };
+        btn.addEventListener('pointerdown', start);
+        btn.addEventListener('pointerup', cancel);
+        btn.addEventListener('pointercancel', cancel);
+        btn.addEventListener('pointerleave', cancel);
+        btn.addEventListener('pointermove', move);
+        btn.addEventListener('contextmenu', e => e.preventDefault());
+        btn.addEventListener('click', (e) => {
+            if (longPressTriggered) { e.preventDefault(); e.stopPropagation(); longPressTriggered = false; return; }
+            playHum60Hz();
+            handleFileAction(owner, repo, filename, branch, btn);
+        });
+        return btn;
     }
 
     function renderRepoItem(container, repo) {
@@ -941,72 +817,64 @@
         div.className = 'repo-item';
         div.id = `repo-${repo.name}`;
 
-        let headerHtml = `<div class="repo-header"><span>${repo.name}</span></div>`;
+        const header = document.createElement('div');
+        header.className = 'repo-header';
+        header.innerHTML = `<span>${repo.name}</span>`;
+        div.appendChild(header);
 
-        // Ligne des fichiers
-        let filesRowHtml = `<div class="repo-files-row" id="files-${repo.name}">`;
+        const filesRow = document.createElement('div');
+        filesRow.className = 'repo-files-row';
+        filesRow.id = `files-${repo.name}`;
         const files = repo.files;
         if (files && files.length > 0) {
-            files.forEach(filename => {
-                const btnClass = getFileButtonClass(filename);
-                let displayName = filename;
-                let extraClasses = '';
-                const lowerName = filename.toLowerCase();
-                if (lowerName === 'manifest.json' || lowerName === 'sw.js' || lowerName === 'readme.md' || lowerName === 'readme') {
-                    extraClasses = ' file-special';
-                    if (lowerName === 'manifest.json') displayName = 'MF';
-                    else if (lowerName === 'sw.js') displayName = 'SW';
-                    else if (lowerName === 'readme.md' || lowerName === 'readme') displayName = 'RD';
-                }
-                filesRowHtml += `<button class="file-btn ${btnClass}${extraClasses}" title="${filename}" onclick="playHum60Hz(); handleFileAction('${repo.owner.login}', '${repo.name}', '${filename}', '${repo.default_branch}', this)">${displayName}</button>`;
-            });
+            files.forEach(filename => filesRow.appendChild(
+                createFileButton(repo.owner.login, repo.name, filename, repo.default_branch)));
         } else if (files === undefined) {
-            // Fichiers en cours de chargement
-            filesRowHtml += `<span class="file-loading-placeholder">⏳ Chargement des fichiers...</span>`;
+            filesRow.innerHTML = `<span class="file-loading-placeholder">⏳ Chargement des fichiers...</span>`;
         } else {
-            filesRowHtml += `<span class="file-loading-placeholder">(aucun fichier texte)</span>`;
+            filesRow.innerHTML = `<span class="file-loading-placeholder">(aucun fichier affichable)</span>`;
         }
-        filesRowHtml += `</div>`;
+        div.appendChild(filesRow);
 
-        // Ligne des actions fixes
-        let fixedRowHtml = `<div class="repo-actions-fixed">`;
-        fixedRowHtml += `<button class="action-btn action-inject" onclick="playHum60Hz(); showInjectConfirmPanel('${repo.name}', '${repo.owner.login}', '${repo.default_branch}')">INJECT</button>`;
-        fixedRowHtml += `<button class="action-btn action-up" onclick="playHum60Hz(); toggleUpMode(this, '${repo.name}')">UP</button>`;
-        fixedRowHtml += `<button class="action-btn action-icon" onclick="playHum60Hz(); uploadIcon('${repo.owner.login}', '${repo.name}', '${repo.default_branch}')">ICON</button>`;
-        fixedRowHtml += `<button class="action-btn action-view" onclick="playHum60Hz(); viewLivePage('${repo.owner.login}', '${repo.name}')">VIEW</button>`;
-        fixedRowHtml += `<button class="action-btn action-back" onclick="playHum60Hz(); showRollbackConfirmPanel('${repo.name}', '${repo.owner.login}', '${repo.default_branch}')">BACK</button>`;
-        fixedRowHtml += `<button class="action-btn action-sup" onclick="playHum60Hz(); showConfirmPanel('${repo.name}')">SUP</button>`;
-        fixedRowHtml += `</div>`;
+        const actionsRow = document.createElement('div');
+        actionsRow.className = 'repo-actions-fixed';
+        actionsRow.innerHTML = `
+            <button class="action-btn action-inject" onclick="playHum60Hz(); showInjectConfirmPanel('${repo.name}', '${repo.owner.login}', '${repo.default_branch}')">INJECT</button>
+            <button class="action-btn action-up" onclick="playHum60Hz(); toggleUpMode(this, '${repo.name}')">UP</button>
+            <button class="action-btn action-icon" onclick="playHum60Hz(); uploadIcon('${repo.owner.login}', '${repo.name}', '${repo.default_branch}')">ICON</button>
+            <button class="action-btn action-new" onclick="playHum60Hz(); openNewFileModal('${repo.owner.login}', '${repo.name}', '${repo.default_branch}')">NEW</button>
+            <button class="action-btn action-view" onclick="playHum60Hz(); viewLivePage('${repo.owner.login}', '${repo.name}')">VIEW</button>
+            <button class="action-btn action-back" onclick="playHum60Hz(); showRollbackConfirmPanel('${repo.name}', '${repo.owner.login}', '${repo.default_branch}')">BACK</button>
+            <button class="action-btn action-sup" onclick="playHum60Hz(); showConfirmPanel('${repo.name}')">SUP</button>
+        `;
+        div.appendChild(actionsRow);
 
-        // Panneaux de confirmation (cachés par défaut)
-        let confirmHtml = `
+        const confirmWrap = document.createElement('div');
+        confirmWrap.innerHTML = `
             <div class="confirm-panel" id="confirm-inject-${repo.name}" style="display:none;">
                 <span style="color:var(--accent); font-weight:bold;">🔧 Injecter les balises PWA dans index.html ?</span>
-                <span style="font-size:10px;">Cette action ajoutera le manifest, le viewport, le thème et l'enregistrement du service worker.</span>
+                <span style="font-size:10px;">Ajoute manifest, viewport, thème et enregistrement du service worker.</span>
                 <div class="confirm-buttons">
-                    <button class="confirm-btn" style="background:linear-gradient(135deg, #ffca28, #b88a00); color:#111;" onclick="playHum60Hz(); confirmedInject('${repo.owner.login}', '${repo.name}', '${repo.default_branch}')">INJECTER</button>
-                    <button class="confirm-btn" style="background:linear-gradient(135deg, #444, #222); color:white;" onclick="playHum60Hz(); hideInjectConfirmPanel('${repo.name}')">ANNULER</button>
+                    <button class="confirm-btn" style="background:linear-gradient(135deg,#ffca28,#b88a00);color:#111;" onclick="playHum60Hz(); confirmedInject('${repo.owner.login}','${repo.name}','${repo.default_branch}')">INJECTER</button>
+                    <button class="confirm-btn" style="background:linear-gradient(135deg,#444,#222);color:white;" onclick="playHum60Hz(); hideInjectConfirmPanel('${repo.name}')">ANNULER</button>
                 </div>
             </div>
             <div class="confirm-panel" id="confirm-rollback-${repo.name}" style="display:none;">
-                <span style="color:var(--orange); font-weight:bold;">⚠️ Restaurer l'état précédent du dépôt ${repo.name} ?</span>
-                <span style="font-size:10px;">Cette action remplacera index.html, manifest.json, sw.js et icon.png par la version du commit antérieur.</span>
+                <span style="color:var(--orange); font-weight:bold;">⚠️ Restaurer l'état précédent de ${repo.name} ?</span>
                 <div class="confirm-buttons">
-                    <button class="confirm-btn" style="background:linear-gradient(135deg, #f85149, #bd2c26); color:white;" onclick="playHum60Hz(); confirmedRollback('${repo.owner.login}', '${repo.name}', '${repo.default_branch}')">CONFIRMER</button>
-                    <button class="confirm-btn" style="background:linear-gradient(135deg, #444, #222); color:white;" onclick="playHum60Hz(); hideRollbackConfirmPanel('${repo.name}')">ANNULER</button>
+                    <button class="confirm-btn" style="background:linear-gradient(135deg,#f85149,#bd2c26);color:white;" onclick="playHum60Hz(); confirmedRollback('${repo.owner.login}','${repo.name}','${repo.default_branch}')">CONFIRMER</button>
+                    <button class="confirm-btn" style="background:linear-gradient(135deg,#444,#222);color:white;" onclick="playHum60Hz(); hideRollbackConfirmPanel('${repo.name}')">ANNULER</button>
                 </div>
             </div>
             <div class="confirm-panel" id="confirm-${repo.name}" style="display:none;">
                 <span style="color:var(--danger); font-weight:bold;">Supprimer définitivement ${repo.name} ?</span>
                 <div class="confirm-buttons">
-                    <button class="confirm-btn" style="background:linear-gradient(135deg, #f85149, #bd2c26); color:white;" onclick="playHum60Hz(); deleteRepository('${repo.owner.login}', '${repo.name}')">CONFIRMER</button>
-                    <button class="confirm-btn" style="background:linear-gradient(135deg, #444, #222); color:white;" onclick="playHum60Hz(); hideConfirmPanel('${repo.name}')">ANNULER</button>
+                    <button class="confirm-btn" style="background:linear-gradient(135deg,#f85149,#bd2c26);color:white;" onclick="playHum60Hz(); deleteRepository('${repo.owner.login}','${repo.name}')">CONFIRMER</button>
+                    <button class="confirm-btn" style="background:linear-gradient(135deg,#444,#222);color:white;" onclick="playHum60Hz(); hideConfirmPanel('${repo.name}')">ANNULER</button>
                 </div>
             </div>
         `;
-
-        // Le tracker n'est pas créé ici, il sera créé à la demande
-        div.innerHTML = headerHtml + filesRowHtml + fixedRowHtml + confirmHtml;
+        div.appendChild(confirmWrap);
         container.appendChild(div);
 
         if (upModeState[repo.name]) {
@@ -1015,49 +883,437 @@
         }
     }
 
-    // ---------- TRACKER (créé à la demande) ----------
+    // ================================================================
+    // =====================  ÉDITEUR AMÉLIORÉ  =======================
+    // ================================================================
+    let editorState = {
+        owner: null, repo: null, filename: null, branch: null,
+        originalContent: '',
+        search: { query: '', matches: [], currentIndex: -1 }
+    };
+
+    function autoGrow(ta) {
+        ta.style.height = 'auto';
+        void ta.offsetHeight;
+        ta.style.height = ta.scrollHeight + 'px';
+    }
+
+    function rebuildHighlight() {
+        const ta = document.getElementById('editorTextarea');
+        const hl = document.getElementById('editorHighlight');
+        const text = ta.value;
+        const q = editorState.search.query;
+
+        if (!q) {
+            if (hl.textContent !== (text || ' ')) hl.textContent = text || ' ';
+            return;
+        }
+
+        const lowerText = text.toLowerCase();
+        const lowerQ = q.toLowerCase();
+        const matches = [];
+        let i = 0, lastIndex = 0, html = '';
+        const curIdx = editorState.search.currentIndex;
+
+        while ((i = lowerText.indexOf(lowerQ, i)) !== -1) {
+            html += escapeHtml(text.slice(lastIndex, i));
+            const idx = matches.length;
+            const cls = idx === curIdx ? ' class="current"' : '';
+            html += `<mark data-idx="${idx}"${cls}>${escapeHtml(text.slice(i, i + q.length))}</mark>`;
+            matches.push({ start: i, end: i + q.length });
+            i += q.length;
+            lastIndex = i;
+        }
+        html += escapeHtml(text.slice(lastIndex));
+        hl.innerHTML = html || ' ';
+
+        editorState.search.matches = matches;
+
+        if (matches.length === 0) {
+            editorState.search.currentIndex = -1;
+        } else if (curIdx < 0 || curIdx >= matches.length) {
+            editorState.search.currentIndex = 0;
+            const firstMark = hl.querySelector('mark[data-idx="0"]');
+            if (firstMark) firstMark.classList.add('current');
+        }
+        updateSearchCount();
+    }
+
+    function updateSearchCount() {
+        const el = document.getElementById('editorSearchCount');
+        const total = editorState.search.matches.length;
+        const cur = editorState.search.currentIndex;
+        if (!editorState.search.query) {
+            el.textContent = '0/0';
+            el.style.color = '#888';
+        } else if (total === 0) {
+            el.textContent = '0/0';
+            el.style.color = '#f85149';
+        } else {
+            el.textContent = `${cur + 1}/${total}`;
+            el.style.color = '#ffca28';
+        }
+    }
+
+    function scrollToCurrentMatch() {
+        const idx = editorState.search.currentIndex;
+        if (idx < 0) return;
+        const wrap = document.getElementById('editorTextareaWrap');
+        const hl = document.getElementById('editorHighlight');
+        const mark = hl.querySelector(`mark[data-idx="${idx}"]`);
+        if (!mark || !wrap) return;
+        const markTop = mark.offsetTop;
+        const markH = mark.offsetHeight;
+        const wrapH = wrap.clientHeight;
+        const target = markTop - wrapH / 2 + markH / 2;
+        wrap.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+    }
+
+    function performSearch(q) {
+        editorState.search.query = q;
+        editorState.search.currentIndex = q ? 0 : -1;
+        rebuildHighlight();
+        if (q) scrollToCurrentMatch();
+    }
+
+    function goToMatch(idx) {
+        const total = editorState.search.matches.length;
+        if (total === 0) return;
+        editorState.search.currentIndex = ((idx % total) + total) % total;
+        rebuildHighlight();
+        scrollToCurrentMatch();
+    }
+
+    function nextMatch() { goToMatch(editorState.search.currentIndex + 1); }
+    function prevMatch() { goToMatch(editorState.search.currentIndex - 1); }
+
+    async function openEditor(owner, repo, filename, branch) {
+        const tok = localStorage.getItem('hubcode_token');
+        if (!tok) { showNotification("Token manquant", "danger"); return; }
+
+        editorState = {
+            owner, repo, filename, branch,
+            originalContent: '',
+            search: { query: '', matches: [], currentIndex: -1 }
+        };
+
+        const modal = document.getElementById('editorModal');
+        const titleEl = document.getElementById('editorTitle');
+        const statusEl = document.getElementById('editorStatus');
+        const ta = document.getElementById('editorTextarea');
+        const hl = document.getElementById('editorHighlight');
+        const saveBtn = document.getElementById('editorSaveBtn');
+        const searchInput = document.getElementById('editorSearchInput');
+
+        titleEl.textContent = `${repo} / ${filename}`;
+        statusEl.style.color = '#888';
+        statusEl.textContent = 'Chargement...';
+        ta.value = '';
+        hl.textContent = '';
+        ta.disabled = true;
+        saveBtn.disabled = true;
+        searchInput.value = '';
+        document.getElementById('editorSearchCount').textContent = '0/0';
+        document.getElementById('editorSearchCount').style.color = '#888';
+        modal.classList.add('visible');
+
+        try {
+            const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`, {
+                headers: { 'Authorization': `token ${tok}` }
+            });
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            const d = await r.json();
+            const content = b64ToUtf8(d.content);
+            editorState.originalContent = content;
+            ta.value = content;
+            ta.disabled = false;
+            saveBtn.disabled = false;
+            statusEl.textContent = `${content.length} caractères`;
+            autoGrow(ta);
+            rebuildHighlight();
+            setTimeout(() => ta.focus(), 60);
+        } catch(e) {
+            statusEl.style.color = '#f85149';
+            statusEl.textContent = 'Erreur : ' + e.message;
+            showNotification('Échec chargement : ' + e.message, 'danger');
+        }
+    }
+
+    function closeEditor() {
+        document.getElementById('editorModal').classList.remove('visible');
+        editorState = {
+            owner:null, repo:null, filename:null, branch:null,
+            originalContent:'', search:{ query:'', matches:[], currentIndex:-1 }
+        };
+    }
+
+    async function saveEditor() {
+        const tok = localStorage.getItem('hubcode_token');
+        if (!tok) { showNotification("Token manquant", "danger"); return; }
+        if (!editorState.owner) return;
+
+        const ta = document.getElementById('editorTextarea');
+        const statusEl = document.getElementById('editorStatus');
+        const saveBtn = document.getElementById('editorSaveBtn');
+        const newContent = ta.value;
+
+        if (newContent === editorState.originalContent) {
+            showNotification("Aucune modification", "warning");
+            closeEditor();
+            return;
+        }
+
+        statusEl.style.color = 'var(--accent)';
+        statusEl.textContent = 'Enregistrement...';
+        saveBtn.disabled = true;
+
+        try {
+            const getR = await fetch(`https://api.github.com/repos/${editorState.owner}/${editorState.repo}/contents/${editorState.filename}?ref=${editorState.branch}`, {
+                headers: { 'Authorization': `token ${tok}` }
+            });
+            if (!getR.ok) throw new Error(`HTTP ${getR.status}`);
+            const d = await getR.json();
+            const b64 = utf8ToB64(newContent);
+            const putR = await fetch(`https://api.github.com/repos/${editorState.owner}/${editorState.repo}/contents/${editorState.filename}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${tok}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Hubcode: edit ${editorState.filename} via editor`,
+                    content: b64, branch: editorState.branch, sha: d.sha
+                })
+            });
+            if (!putR.ok) {
+                let em = `HTTP ${putR.status}`;
+                try { const err = await putR.json(); if (err.message) em = err.message; } catch(_){}
+                throw new Error(em);
+            }
+            editorState.originalContent = newContent;
+            statusEl.style.color = 'var(--success)';
+            statusEl.textContent = '✓ Enregistré';
+            showNotification(`${editorState.filename} enregistré`, 'success');
+            setTimeout(closeEditor, 700);
+        } catch(e) {
+            statusEl.style.color = '#f85149';
+            statusEl.textContent = 'Erreur : ' + e.message;
+            showNotification('Échec : ' + e.message, 'danger');
+        } finally { saveBtn.disabled = false; }
+    }
+
+    // ================================================================
+    // =====================  NOUVEAU FICHIER  ========================
+    // ================================================================
+    let newFileState = { owner: null, repo: null, branch: null };
+
+    function openNewFileModal(owner, repo, branch) {
+        const tok = localStorage.getItem('hubcode_token');
+        if (!tok) { showNotification("Token manquant", "danger"); return; }
+        newFileState = { owner, repo, branch };
+        document.getElementById('newFileTitle').textContent = `${repo} — Nouveau fichier`;
+        document.getElementById('newFileName').value = '';
+        document.getElementById('newFileExt').value = '';
+        document.getElementById('newFileContent').value = '';
+        const st = document.getElementById('newFileStatus');
+        st.textContent = ''; st.style.color = '#888';
+        document.getElementById('newFileSaveBtn').disabled = false;
+        document.getElementById('newFileModal').classList.add('visible');
+        setTimeout(() => document.getElementById('newFileName').focus(), 60);
+    }
+
+    function closeNewFileModal() {
+        document.getElementById('newFileModal').classList.remove('visible');
+        newFileState = { owner: null, repo: null, branch: null };
+    }
+
+    async function saveNewFile() {
+        const tok = localStorage.getItem('hubcode_token');
+        if (!tok || !newFileState.owner) return;
+
+        const nameInput = document.getElementById('newFileName');
+        const extInput  = document.getElementById('newFileExt');
+        const contentInput = document.getElementById('newFileContent');
+        const statusEl = document.getElementById('newFileStatus');
+        const saveBtn  = document.getElementById('newFileSaveBtn');
+
+        let name = nameInput.value.trim();
+        let ext  = extInput.value.trim();
+        const content = contentInput.value;
+
+        if (!name) {
+            showNotification("Nom du fichier requis", "danger");
+            nameInput.focus();
+            return;
+        }
+        if (name.includes('/')) {
+            showNotification("Pas de sous-dossier (nom simple uniquement)", "danger");
+            return;
+        }
+        if (ext && !ext.startsWith('.')) ext = '.' + ext;
+
+        let filename = name;
+        if (ext && !name.toLowerCase().endsWith(ext.toLowerCase())) {
+            filename = name + ext;
+        }
+
+        statusEl.style.color = 'var(--accent)';
+        statusEl.textContent = 'Enregistrement...';
+        saveBtn.disabled = true;
+
+        try {
+            let existingSha = null;
+            const getR = await fetch(
+                `https://api.github.com/repos/${newFileState.owner}/${newFileState.repo}/contents/${filename}?ref=${newFileState.branch}`,
+                { headers: { 'Authorization': `token ${tok}` } }
+            );
+            if (getR.ok) {
+                const d = await getR.json();
+                existingSha = d.sha;
+                if (!confirm(`Le fichier "${filename}" existe déjà. L'écraser ?`)) {
+                    statusEl.textContent = '';
+                    saveBtn.disabled = false;
+                    return;
+                }
+            } else if (getR.status !== 404) {
+                throw new Error(`HTTP ${getR.status}`);
+            }
+
+            const b64 = utf8ToB64(content);
+            const putBody = {
+                message: existingSha
+                    ? `Hubcode: update ${filename} via NEW`
+                    : `Hubcode: create ${filename} via NEW`,
+                content: b64,
+                branch: newFileState.branch
+            };
+            if (existingSha) putBody.sha = existingSha;
+
+            const putR = await fetch(
+                `https://api.github.com/repos/${newFileState.owner}/${newFileState.repo}/contents/${filename}`,
+                {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${tok}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(putBody)
+                }
+            );
+            if (!putR.ok) {
+                let em = `HTTP ${putR.status}`;
+                try { const err = await putR.json(); if (err.message) em = err.message; } catch(_){}
+                throw new Error(em);
+            }
+
+            statusEl.style.color = 'var(--success)';
+            statusEl.textContent = existingSha ? '✓ Mis à jour' : '✓ Créé';
+            showNotification(`${filename} ${existingSha ? 'mis à jour' : 'créé'}`, 'success');
+
+            const repoName = newFileState.repo;
+            const ownerName = newFileState.owner;
+            const branchName = newFileState.branch;
+            delete fileCache[repoName];
+            const repoData = currentRepos.find(r => r.name === repoName);
+            if (repoData) {
+                const files = await loadFilesForRepo(ownerName, repoName, branchName, tok);
+                repoData.files = files;
+                renderPage();
+            }
+
+            setTimeout(closeNewFileModal, 700);
+        } catch(e) {
+            statusEl.style.color = '#f85149';
+            statusEl.textContent = 'Erreur : ' + e.message;
+            showNotification('Échec : ' + e.message, 'danger');
+        } finally {
+            saveBtn.disabled = false;
+        }
+    }
+
+    // ================================================================
+    // ===============  ÉVÉNEMENTS ÉDITEUR (recherche, etc.)  =========
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        const ta = document.getElementById('editorTextarea');
+        const searchInput = document.getElementById('editorSearchInput');
+        const prevBtn = document.getElementById('editorPrevBtn');
+        const nextBtn = document.getElementById('editorNextBtn');
+        const closeSearchBtn = document.getElementById('editorSearchCloseBtn');
+
+        searchInput.addEventListener('input', () => performSearch(searchInput.value));
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (e.shiftKey) prevMatch(); else nextMatch();
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                if (searchInput.value) { searchInput.value = ''; performSearch(''); }
+                else searchInput.blur();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => { playHum60Hz(); prevMatch(); searchInput.focus(); });
+        nextBtn.addEventListener('click', () => { playHum60Hz(); nextMatch(); searchInput.focus(); });
+        closeSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            performSearch('');
+            searchInput.focus();
+        });
+
+        ta.addEventListener('input', () => {
+            autoGrow(ta);
+            rebuildHighlight();
+        });
+
+        ta.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+                e.preventDefault();
+                searchInput.focus(); searchInput.select();
+            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                saveEditor();
+            }
+        });
+    });
+
+    // Échap global
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const m = document.getElementById('editorModal');
+            if (m && m.classList.contains('visible')) {
+                const si = document.getElementById('editorSearchInput');
+                if (document.activeElement === si && si.value) return;
+                closeEditor();
+                return;
+            }
+            const nf = document.getElementById('newFileModal');
+            if (nf && nf.classList.contains('visible')) closeNewFileModal();
+        }
+    });
+
+    // ---------- TRACKER ----------
     function getTracker(repoName) {
         let el = document.getElementById(`tracker-${repoName}`);
         if (!el) {
             const repoDiv = document.getElementById(`repo-${repoName}`);
             if (repoDiv) {
-                const trackerDiv = document.createElement('div');
-                trackerDiv.id = `tracker-${repoName}`;
-                trackerDiv.className = 'tracker-terminal';
-                trackerDiv.innerHTML = `
+                const t = document.createElement('div');
+                t.id = `tracker-${repoName}`;
+                t.className = 'tracker-terminal';
+                t.innerHTML = `
                     <div class="tracker-header">
                         <span>⛁ LOGS</span>
-                        <span>
-                            <button class="tracker-close" onclick="hideTracker('${repoName}')">✕</button>
-                        </span>
+                        <span><button class="tracker-close" onclick="hideTracker('${repoName}')">✕</button></span>
                     </div>
                     <div class="tracker-content"></div>
                 `;
-                repoDiv.appendChild(trackerDiv);
-                el = trackerDiv;
+                repoDiv.appendChild(t);
+                el = t;
             }
         }
         return el;
     }
-
-    function showTracker(repoName) {
-        const t = getTracker(repoName);
-        if (t) {
-            t.classList.add('visible');
-            // Effacer les anciens logs si on veut ?
-        }
-    }
-
-    function hideTracker(repoName) {
-        const t = document.getElementById(`tracker-${repoName}`);
-        if (t) t.classList.remove('visible');
-    }
-
+    function showTracker(r) { const t = getTracker(r); if (t) t.classList.add('visible'); }
+    function hideTracker(r) { const t = document.getElementById(`tracker-${r}`); if (t) t.classList.remove('visible'); }
     function addLog(repoName, message, status = "step") {
-        const t = getTracker(repoName);
-        if (!t) return;
-        const content = t.querySelector('.tracker-content');
-        if (!content) return;
+        const t = getTracker(repoName); if (!t) return;
+        const content = t.querySelector('.tracker-content'); if (!content) return;
         const line = document.createElement('div');
         line.className = `log-line log-${status === 'error' ? 'error' : (status === 'success' ? 'success' : (status === 'warning' ? 'warning' : 'step'))}`;
         const time = new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
@@ -1066,22 +1322,13 @@
         if (status === 'loading') line.innerHTML += `<span class="spinner-small"></span>`;
         content.appendChild(line);
         content.scrollTop = content.scrollHeight;
-        // Afficher le tracker si ce n'est pas déjà fait
         showTracker(repoName);
     }
-
-    function clearTracker(repoName) {
-        const t = document.getElementById(`tracker-${repoName}`);
-        if (t) {
-            const content = t.querySelector('.tracker-content');
-            if (content) content.innerHTML = '';
-        }
+    function clearTracker(r) {
+        const t = document.getElementById(`tracker-${r}`);
+        if (t) { const c = t.querySelector('.tracker-content'); if (c) c.innerHTML = ''; }
     }
-
-    function disableBackBtn(repoName, disabled) {
-        const btn = document.querySelector(`#repo-${repoName} .action-back`);
-        if (btn) btn.disabled = disabled;
-    }
+    function disableBackBtn(r, d) { const b = document.querySelector(`#repo-${r} .action-back`); if (b) b.disabled = d; }
 
     // ---------- MODE UP ----------
     function toggleUpMode(buttonEl, repoName) {
@@ -1096,47 +1343,33 @@
             addLog(repoName, "Mode UP activé – cliquez sur un fichier pour coller depuis le presse-papiers", "success");
         }
     }
-
-    function disableUpModeForRepo(repoName) {
-        if (upModeState[repoName]) {
-            upModeState[repoName] = false;
-            const upBtn = document.querySelector(`#repo-${repoName} .action-up`);
-            if (upBtn) upBtn.classList.remove('action-up-active');
-            addLog(repoName, "Mode UP désactivé automatiquement", "warning");
+    function disableUpModeForRepo(r) {
+        if (upModeState[r]) {
+            upModeState[r] = false;
+            const b = document.querySelector(`#repo-${r} .action-up`);
+            if (b) b.classList.remove('action-up-active');
+            addLog(r, "Mode UP désactivé automatiquement", "warning");
         }
     }
 
     // ---------- HANDLE FILE ACTION ----------
     async function handleFileAction(owner, repo, filename, branch, buttonElement) {
-        // Si les fichiers ne sont pas encore chargés, on les charge d'abord
         if (!fileCache[repo]) {
-            await loadFilesForRepo(owner, repo, branch, token);
-            // Rafraîchir l'affichage
+            await loadFilesForRepo(owner, repo, branch, token || localStorage.getItem('hubcode_token'));
             const repoData = currentRepos.find(r => r.name === repo);
-            if (repoData) {
-                repoData.files = fileCache[repo] || [];
-                renderPage();
-            }
+            if (repoData) { repoData.files = fileCache[repo] || []; renderPage(); return; }
         }
-        if (upModeState[repo]) {
-            await pasteToGitFile(owner, repo, filename, branch, buttonElement);
-        } else {
-            await copyGitFile(owner, repo, filename);
-        }
+        if (upModeState[repo]) await pasteToGitFile(owner, repo, filename, branch, buttonElement);
+        else await copyGitFile(owner, repo, filename);
     }
 
     // ---------- PASTE (UP) ----------
     async function pasteToGitFile(owner, repo, filename, branch, buttonElement) {
         const token = localStorage.getItem('hubcode_token');
-        if (!token) {
-            showNotification("Token manquant", "danger");
-            return;
-        }
-
+        if (!token) { showNotification("Token manquant", "danger"); return; }
         buttonElement.classList.add('btn-flash-red');
         setActivityState(true, `UP ${filename.toUpperCase()}`);
         addLog(repo, `Mode UP : collage de ${filename} depuis le presse-papiers...`, "step");
-
         try {
             addLog(repo, "Lecture du presse-papiers...", "loading");
             let clipboardText = "";
@@ -1144,33 +1377,17 @@
                 clipboardText = await navigator.clipboard.readText();
                 if (!clipboardText || clipboardText.trim() === "") throw new Error("Presse-papiers vide");
                 addLog(repo, `Contenu lu (${clipboardText.length} caractères)`, "success");
-            } catch (err) {
-                throw new Error(`Impossible de lire le presse-papiers: ${err.message}`);
-            }
+            } catch (err) { throw new Error(`Impossible de lire le presse-papiers: ${err.message}`); }
 
-            addLog(repo, `Récupération du SHA actuel de ${filename}...`, "loading");
             let currentSha = null;
-            const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`;
-            const getResp = await fetch(getUrl, { headers: { 'Authorization': `token ${token}` } });
-            if (getResp.status === 200) {
-                const data = await getResp.json();
-                currentSha = data.sha;
-                addLog(repo, `SHA existant récupéré`, "success");
-            } else if (getResp.status === 404) {
-                addLog(repo, `Fichier ${filename} inexistant, création imminente`, "warning");
-            } else {
-                throw new Error(`Erreur GET (${getResp.status})`);
-            }
+            const getResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}?ref=${branch}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            if (getResp.status === 200) { const data = await getResp.json(); currentSha = data.sha; }
+            else if (getResp.status !== 404) throw new Error(`Erreur GET (${getResp.status})`);
 
             const b64Content = utf8ToB64(clipboardText);
-            addLog(repo, `Contenu converti en Base64`, "success");
-
-            addLog(repo, `Envoi vers ${filename}...`, "loading");
-            const putBody = {
-                message: `Hubcode: fast UP update via clipboard (${filename})`,
-                content: b64Content,
-                branch: branch
-            };
+            const putBody = { message: `Hubcode: fast UP (${filename})`, content: b64Content, branch };
             if (currentSha) putBody.sha = currentSha;
             const putResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}`, {
                 method: 'PUT',
@@ -1178,10 +1395,10 @@
                 body: JSON.stringify(putBody)
             });
             if (!putResp.ok) {
-                const errData = await putResp.json();
+                const errData = await putResp.json().catch(()=>({}));
                 throw new Error(errData.message || `Échec PUT (${putResp.status})`);
             }
-            addLog(repo, `✅ ${filename} mis à jour avec succès !`, "success");
+            addLog(repo, `✅ ${filename} mis à jour !`, "success");
             showNotification(`${filename} mis à jour depuis presse-papiers`, "success");
         } catch (err) {
             addLog(repo, `ERREUR : ${err.message}`, "error");
@@ -1196,16 +1413,11 @@
     // ---------- UPLOAD ICON ----------
     function uploadIcon(owner, repo, branch) {
         const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.className = 'hidden-input';
+        input.type = 'file'; input.accept = 'image/*'; input.className = 'hidden-input';
         input.onchange = async function(e) {
             const file = e.target.files[0];
             if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                showNotification("Veuillez sélectionner une image", "danger");
-                return;
-            }
+            if (!file.type.startsWith('image/')) { showNotification("Veuillez sélectionner une image", "danger"); return; }
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 const base64Data = ev.target.result.split(',')[1];
@@ -1213,60 +1425,37 @@
             };
             reader.readAsDataURL(file);
         };
-        document.body.appendChild(input);
-        input.click();
-        input.remove();
+        document.body.appendChild(input); input.click(); input.remove();
     }
-
     async function pushIconToRepo(owner, repo, branch, base64Data) {
         const token = localStorage.getItem('hubcode_token');
-        if (!token) {
-            showNotification("Token manquant", "danger");
-            return;
-        }
+        if (!token) { showNotification("Token manquant", "danger"); return; }
         setActivityState(true, `ICON ${repo}`);
-        addLog(repo, `Upload de l'icône vers ${owner}/${repo}...`, 'step');
-
+        addLog(repo, `Upload icône vers ${owner}/${repo}...`, 'step');
         try {
-            addLog(repo, "Vérification de l'existant...", 'loading');
             let currentSha = null;
-            const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/icon.png?ref=${branch}`;
-            const getResp = await fetch(getUrl, { headers: { 'Authorization': `token ${token}` } });
-            if (getResp.status === 200) {
-                const data = await getResp.json();
-                currentSha = data.sha;
-                addLog(repo, "SHA existant récupéré", 'success');
-            } else if (getResp.status === 404) {
-                addLog(repo, "Aucun icon.png existant, création", 'warning');
-            } else {
-                throw new Error(`Erreur GET (${getResp.status})`);
-            }
-
-            const putBody = {
-                message: `Hubcode: upload icon.png via ICON action`,
-                content: base64Data,
-                branch: branch
-            };
+            const getResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/icon.png?ref=${branch}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            if (getResp.status === 200) { const data = await getResp.json(); currentSha = data.sha; }
+            else if (getResp.status !== 404) throw new Error(`Erreur GET (${getResp.status})`);
+            const putBody = { message: `Hubcode: upload icon.png`, content: base64Data, branch };
             if (currentSha) putBody.sha = currentSha;
-
-            addLog(repo, "Envoi de l'image...", 'loading');
             const putResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/icon.png`, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify(putBody)
             });
             if (!putResp.ok) {
-                const errData = await putResp.json();
+                const errData = await putResp.json().catch(()=>({}));
                 throw new Error(errData.message || `Échec PUT (${putResp.status})`);
             }
-            addLog(repo, "✅ icon.png mis à jour avec succès !", 'success');
+            addLog(repo, "✅ icon.png mis à jour !", 'success');
             showNotification(`Icone uploadée pour ${repo}`, 'success');
         } catch (err) {
             addLog(repo, `ERREUR : ${err.message}`, 'error');
             showNotification(`Échec upload : ${err.message}`, 'danger');
-        } finally {
-            setActivityState(false);
-        }
+        } finally { setActivityState(false); }
     }
 
     // ---------- INJECTION PWA ----------
@@ -1276,26 +1465,18 @@
         clearTracker(repo);
         setActivityState(true, `INJECTION ${repo}`);
         addLog(repo, `Début injection PWA sur ${owner}/${repo}`, 'step');
-
         try {
-            addLog(repo, "Récupération de index.html...", 'loading');
             const getResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/index.html?ref=${branch}`, {
                 headers: { 'Authorization': `token ${token}` }
             });
-            let currentSha = null;
-            let originalHtml = "";
+            let currentSha = null, originalHtml = "";
             if (getResp.status === 200) {
                 const data = await getResp.json();
                 currentSha = data.sha;
                 originalHtml = b64ToUtf8(data.content);
-                addLog(repo, "Fichier récupéré", 'success');
             } else if (getResp.status === 404) {
-                addLog(repo, "index.html introuvable, création d'un fichier minimal", 'warning');
                 originalHtml = `<!DOCTYPE html><html><head><title>${repo}</title></head><body><h1>${repo}</h1></body></html>`;
-                currentSha = null;
-            } else {
-                throw new Error(`HTTP ${getResp.status}`);
-            }
+            } else throw new Error(`HTTP ${getResp.status}`);
 
             const headElements = `
 <link rel="manifest" href="./manifest.json">
@@ -1309,39 +1490,22 @@
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Service Worker enregistré !'))
-        .catch(err => console.error('Erreur SW :', err));
+      navigator.serviceWorker.register('./sw.js').then(reg => console.log('SW ok')).catch(err => console.error('Erreur SW :', err));
     });
   }
 <\/script>
 `;
             const parser = new DOMParser();
             const doc = parser.parseFromString(originalHtml, 'text/html');
-            if (doc.head) {
-                doc.head.insertAdjacentHTML('beforeend', headElements);
-            } else {
-                doc.documentElement.insertAdjacentHTML('afterbegin', '<head>' + headElements + '</head>');
-            }
-            if (doc.body) {
-                doc.body.insertAdjacentHTML('beforeend', swScript);
-            } else {
-                doc.documentElement.insertAdjacentHTML('beforeend', '<body>' + swScript + '</body>');
-            }
+            if (doc.head) doc.head.insertAdjacentHTML('beforeend', headElements);
+            else doc.documentElement.insertAdjacentHTML('afterbegin', '<head>' + headElements + '</head>');
+            if (doc.body) doc.body.insertAdjacentHTML('beforeend', swScript);
+            else doc.documentElement.insertAdjacentHTML('beforeend', '<body>' + swScript + '</body>');
             let updatedHtml = doc.documentElement.outerHTML;
-            if (!originalHtml.toLowerCase().includes('<!doctype html>')) {
-                updatedHtml = '<!DOCTYPE html>\n' + updatedHtml;
-            }
+            if (!originalHtml.toLowerCase().includes('<!doctype html>')) updatedHtml = '<!DOCTYPE html>\n' + updatedHtml;
 
             const b64Content = utf8ToB64(updatedHtml);
-            addLog(repo, "Balises PWA injectées", 'success');
-
-            addLog(repo, "Envoi de la mise à jour...", 'loading');
-            const putBody = {
-                message: "Hubcode: injection PWA (manifest + service worker)",
-                content: b64Content,
-                branch: branch
-            };
+            const putBody = { message: "Hubcode: injection PWA", content: b64Content, branch };
             if (currentSha) putBody.sha = currentSha;
             const putResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/index.html`, {
                 method: 'PUT',
@@ -1349,220 +1513,30 @@
                 body: JSON.stringify(putBody)
             });
             if (!putResp.ok) {
-                const errData = await putResp.json();
+                const errData = await putResp.json().catch(()=>({}));
                 throw new Error(errData.message || "Erreur lors de la mise à jour");
             }
-            addLog(repo, "Fichier mis à jour avec succès !", 'success');
+            addLog(repo, "Fichier mis à jour !", 'success');
             showNotification(`Injection PWA terminée pour ${repo}`, 'success');
         } catch (err) {
             addLog(repo, `ERREUR : ${err.message}`, 'error');
             showNotification(`Échec injection sur ${repo} : ${err.message}`, 'danger');
-        } finally {
-            setActivityState(false);
-        }
+        } finally { setActivityState(false); }
     }
 
-    // ---------- PANNEaux de confirmation ----------
-    function showInjectConfirmPanel(repoName, owner, branch) {
-        hideRollbackConfirmPanel(repoName);
-        hideConfirmPanel(repoName);
-        const panel = document.getElementById(`confirm-inject-${repoName}`);
-        if (panel) panel.style.display = 'flex';
-    }
-    function hideInjectConfirmPanel(repoName) {
-        const panel = document.getElementById(`confirm-inject-${repoName}`);
-        if (panel) panel.style.display = 'none';
-    }
+    // ---------- PANELS ----------
+    function showInjectConfirmPanel(r) { hideRollbackConfirmPanel(r); hideConfirmPanel(r);
+        const p = document.getElementById(`confirm-inject-${r}`); if (p) p.style.display = 'flex'; }
+    function hideInjectConfirmPanel(r) { const p = document.getElementById(`confirm-inject-${r}`); if (p) p.style.display = 'none'; }
+    function showRollbackConfirmPanel(r) { hideInjectConfirmPanel(r); hideConfirmPanel(r);
+        const p = document.getElementById(`confirm-rollback-${r}`); if (p) p.style.display = 'flex'; }
+    function hideRollbackConfirmPanel(r) { const p = document.getElementById(`confirm-rollback-${r}`); if (p) p.style.display = 'none'; }
+    function showConfirmPanel(r) { hideRollbackConfirmPanel(r); hideInjectConfirmPanel(r);
+        const p = document.getElementById(`confirm-${r}`); if (p) p.style.display = 'flex'; }
+    function hideConfirmPanel(r) { const p = document.getElementById(`confirm-${r}`); if (p) p.style.display = 'none'; }
+    async function confirmedRollback(o, r, b) { hideRollbackConfirmPanel(r); await revertToPreviousCommit(o, r, b); }
+    async function confirmedInject(o, r, b) { hideInjectConfirmPanel(r); await injectPwaToRepo(o, r, b); }
 
-    // ---------- ROLLBACK COMPLET ----------
-    const PWA_FILES = ['index.html', 'manifest.json', 'sw.js', 'icon.png'];
-
-    async function getFileAtCommit(owner, repo, file, commitSha, token) {
-        try {
-            const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${file}?ref=${commitSha}`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            if (!r.ok) return null;
-            const d = await r.json();
-            return { content: b64ToUtf8(d.content), sha: d.sha };
-        } catch { return null; }
-    }
-
-    async function getCurrentState(owner, repo, branch, token) {
-        const state = {};
-        for (const f of PWA_FILES) {
-            try {
-                const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${f}?ref=${branch}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                if (r.ok) {
-                    const d = await r.json();
-                    state[f] = { content: b64ToUtf8(d.content), sha: d.sha };
-                } else if (r.status === 404) state[f] = null;
-            } catch(e) { /* ignore */ }
-        }
-        return state;
-    }
-
-    async function restoreFile(owner, repo, file, targetContent, currentSha, branch, token, logRepo) {
-        addLog(logRepo, `Restauration ${file}...`, 'loading');
-        const b64 = utf8ToB64(targetContent);
-        const body = { message: `Hubcode: restore ${file}`, content: b64, branch };
-        if (currentSha) body.sha = currentSha;
-        const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${file}`, {
-            method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body)
-        });
-        if (!r.ok) throw new Error(`Échec PUT ${file} (${r.status})`);
-        addLog(logRepo, `${file} restauré ✓`, 'success');
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return true;
-    }
-
-    async function rollbackToCommit(owner, repo, branch, targetSha, token, logRepo) {
-        addLog(logRepo, `Restauration complète vers ${targetSha.substring(0,7)}...`, 'step');
-        const targetState = {};
-        for (const f of PWA_FILES) {
-            const fc = await getFileAtCommit(owner, repo, f, targetSha, token);
-            if (fc) targetState[f] = fc.content;
-            else addLog(logRepo, `${f} absent dans la cible, ignoré.`, 'warning');
-        }
-        if (Object.keys(targetState).length === 0) throw new Error("Aucun fichier PWA trouvé.");
-        const currentState = await getCurrentState(owner, repo, branch, token);
-        for (const f of Object.keys(targetState)) {
-            const current = currentState[f];
-            await restoreFile(owner, repo, f, targetState[f], current ? current.sha : null, branch, token, logRepo);
-        }
-        let problems = 0;
-        for (const f of Object.keys(targetState)) {
-            await new Promise(r => setTimeout(r, 500));
-            const after = await getFileAtCommit(owner, repo, f, branch, token);
-            if (!after) { problems++; continue; }
-            if (normalize(after.content) !== normalize(targetState[f])) {
-                addLog(logRepo, `${f} : différé (cache GitHub)`, 'warning');
-                problems++;
-            } else {
-                addLog(logRepo, `${f} vérifié ✓`, 'success');
-            }
-        }
-        if (problems === 0) addLog(logRepo, "Rollback complet réussi.", 'success');
-        else addLog(logRepo, `Rollback effectué (${problems} fichier(s) en cache). Attendez 1 min.`, 'warning');
-        return true;
-    }
-
-    async function revertToPreviousCommit(owner, repo, defaultBranch) {
-        const token = localStorage.getItem('hubcode_token');
-        if (!token) { showNotification("Token manquant", "danger"); return; }
-        clearTracker(repo);
-        disableBackBtn(repo, true);
-        setActivityState(true, `ROLLBACK ${repo}`);
-        addLog(repo, `Début rollback pour ${owner}/${repo}`, 'step');
-
-        try {
-            addLog(repo, "Récupération des 6 derniers commits...", 'loading');
-            const commitsResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=6`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            if (!commitsResp.ok) throw new Error(`HTTP ${commitsResp.status}`);
-            const commits = await commitsResp.json();
-            if (commits.length < 2) throw new Error("Moins de 2 commits.");
-            
-            addLog(repo, "Analyse de l'état actuel...", 'loading');
-            const currentState = await getCurrentState(owner, repo, defaultBranch, token);
-            
-            let targetCommit = null;
-            for (let i = 1; i < commits.length; i++) {
-                const c = commits[i];
-                addLog(repo, `Comparaison avec commit ${c.sha.substring(0,7)} : "${c.commit.message.split('\n')[0].substring(0,40)}"`, 'step');
-                let diffFound = false;
-                for (const f of PWA_FILES) {
-                    const targetFile = await getFileAtCommit(owner, repo, f, c.sha, token);
-                    const currentFile = currentState[f];
-                    const targetNorm = targetFile ? normalize(targetFile.content) : null;
-                    const currentNorm = currentFile ? normalize(currentFile.content) : null;
-                    if (targetNorm !== currentNorm) {
-                        diffFound = true;
-                        addLog(repo, `→ ${f} différent`, 'warning');
-                    }
-                }
-                if (diffFound) {
-                    targetCommit = c;
-                    addLog(repo, `Commit ${c.sha.substring(0,7)} sélectionné.`, 'success');
-                    break;
-                } else {
-                    addLog(repo, `Commit ${c.sha.substring(0,7)} : identique à l'actuel.`, 'warning');
-                }
-            }
-            
-            if (!targetCommit) {
-                addLog(repo, "❌ Aucun commit antérieur différent trouvé.", 'error');
-                addLog(repo, "👉 Le rollback n'est pas possible (tous identiques).", 'step');
-                return;
-            }
-            
-            await rollbackToCommit(owner, repo, defaultBranch, targetCommit.sha, token, repo);
-            
-            addLog(repo, "Demande de reconstruction GitHub Pages...", 'loading');
-            try {
-                const rb = await fetch(`https://api.github.com/repos/${owner}/${repo}/pages/builds`, { method: 'POST', headers: { 'Authorization': `token ${token}` } });
-                if (rb.ok) addLog(repo, "Rebuild déclenché ✓", 'success');
-                else if (rb.status === 404) addLog(repo, "Pages non activé", 'warning');
-                else addLog(repo, `Rebuild échoué (${rb.status})`, 'warning');
-            } catch(e) { addLog(repo, "Rebuild non supporté", 'warning'); }
-            
-            addLog(repo, "Surveillance du déploiement (max 15x5s)...", 'loading');
-            let deployed = false;
-            for (let i=1; i<=15; i++) {
-                await new Promise(r => setTimeout(r, 5000));
-                addLog(repo, `Polling ${i}/15`, 'loading');
-                const pages = await fetch(`https://api.github.com/repos/${owner}/${repo}/pages`, { headers: { 'Authorization': `token ${token}` } });
-                if (pages.ok) {
-                    const data = await pages.json();
-                    if (data.status === 'built') { deployed = true; addLog(repo, "✅ Build terminé !", 'success'); break; }
-                    else if (data.status === 'building') addLog(repo, "Build en cours...", 'loading');
-                } else if (pages.status === 404) { addLog(repo, "Pages non activé", 'warning'); deployed = true; break; }
-            }
-            const url = `https://${owner.toLowerCase()}.github.io/${repo}/?t=${Date.now()}`;
-            if (deployed) addLog(repo, `🎉 Rollback effectif ! Vérifiez : ${url}`, 'success');
-            else addLog(repo, `⚠️ Code restauré mais déploiement lent. Ouvrez : ${url}`, 'warning');
-            showNotification(`Rollback ${repo} terminé`, 'success');
-        } catch(err) {
-            addLog(repo, `ERREUR : ${err.message}`, 'error');
-            showNotification(`Rollback échoué : ${err.message}`, 'danger');
-        } finally {
-            disableBackBtn(repo, false);
-            setActivityState(false);
-        }
-    }
-
-    // ---------- GESTION DES CONFIRMATIONS ----------
-    function showRollbackConfirmPanel(repoName, owner, defaultBranch) {
-        hideInjectConfirmPanel(repoName);
-        hideConfirmPanel(repoName);
-        const panel = document.getElementById(`confirm-rollback-${repoName}`);
-        if (panel) panel.style.display = 'flex';
-    }
-    function hideRollbackConfirmPanel(repoName) {
-        const panel = document.getElementById(`confirm-rollback-${repoName}`);
-        if (panel) panel.style.display = 'none';
-    }
-    function showConfirmPanel(repoName) {
-        hideRollbackConfirmPanel(repoName);
-        hideInjectConfirmPanel(repoName);
-        const panel = document.getElementById(`confirm-${repoName}`);
-        if (panel) panel.style.display = 'flex';
-    }
-    function hideConfirmPanel(repoName) {
-        const panel = document.getElementById(`confirm-${repoName}`);
-        if (panel) panel.style.display = 'none';
-    }
-    async function confirmedRollback(owner, repo, defaultBranch) {
-        hideRollbackConfirmPanel(repo);
-        await revertToPreviousCommit(owner, repo, defaultBranch);
-    }
-    async function confirmedInject(owner, repo, branch) {
-        hideInjectConfirmPanel(repo);
-        await injectPwaToRepo(owner, repo, branch);
-    }
     async function deleteRepository(owner, repoName) {
         const token = localStorage.getItem('hubcode_token');
         hideConfirmPanel(repoName);
@@ -1571,18 +1545,21 @@
             const r = await fetch(`https://api.github.com/repos/${owner}/${repoName}`, {
                 method: 'DELETE', headers: { 'Authorization': `token ${token}` }
             });
-            if (r.status === 204 || r.status === 240) {
-                // Supprimer du cache
+            if (r.status === 204) {
                 delete fileCache[repoName];
-                // Recharger la page courante
-                await loadPage(currentPage);
+                allRepos = allRepos.filter(x => x.name !== repoName);
+                filteredRepos = filteredRepos.filter(x => x.name !== repoName);
+                totalRepos = filteredRepos.length;
+                totalPages = Math.max(1, Math.ceil(totalRepos / PAGE_SIZE));
+                if (currentPage > totalPages) currentPage = totalPages;
+                loadPage(currentPage);
                 showNotification(`Dépôt supprimé`, 'success');
             } else throw new Error("Droits insuffisants");
         } catch(e) { showNotification(e.message, 'danger'); }
         finally { setActivityState(false); }
     }
 
-    // ---------- COPIE (mode normal) ----------
+    // ---------- COPIE ----------
     async function copyGitFile(owner, repo, filename) {
         const token = localStorage.getItem('hubcode_token');
         setActivityState(true, `COPIE ${filename}`);
@@ -1599,12 +1576,126 @@
         finally { setActivityState(false); }
     }
 
-    // ---------- VIEW ----------
+    // ---------- ROLLBACK ----------
+    const PWA_FILES = ['index.html', 'manifest.json', 'sw.js', 'icon.png'];
+    async function getFileAtCommit(owner, repo, file, sha, token) {
+        try {
+            const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${file}?ref=${sha}`, {
+                headers: { 'Authorization': `token ${token}` } });
+            if (!r.ok) return null;
+            const d = await r.json();
+            return { content: b64ToUtf8(d.content), sha: d.sha };
+        } catch { return null; }
+    }
+    async function getCurrentState(owner, repo, branch, token) {
+        const state = {};
+        for (const f of PWA_FILES) {
+            try {
+                const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${f}?ref=${branch}`, {
+                    headers: { 'Authorization': `token ${token}` } });
+                if (r.ok) { const d = await r.json(); state[f] = { content: b64ToUtf8(d.content), sha: d.sha }; }
+                else if (r.status === 404) state[f] = null;
+            } catch(e) {}
+        }
+        return state;
+    }
+    async function restoreFile(owner, repo, file, targetContent, currentSha, branch, token, logRepo) {
+        addLog(logRepo, `Restauration ${file}...`, 'loading');
+        const b64 = utf8ToB64(targetContent);
+        const body = { message: `Hubcode: restore ${file}`, content: b64, branch };
+        if (currentSha) body.sha = currentSha;
+        const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${file}`, {
+            method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+        });
+        if (!r.ok) throw new Error(`Échec PUT ${file} (${r.status})`);
+        addLog(logRepo, `${file} restauré ✓`, 'success');
+        await new Promise(res => setTimeout(res, 1000));
+        return true;
+    }
+    async function rollbackToCommit(owner, repo, branch, targetSha, token, logRepo) {
+        addLog(logRepo, `Restauration vers ${targetSha.substring(0,7)}...`, 'step');
+        const targetState = {};
+        for (const f of PWA_FILES) {
+            const fc = await getFileAtCommit(owner, repo, f, targetSha, token);
+            if (fc) targetState[f] = fc.content;
+            else addLog(logRepo, `${f} absent, ignoré.`, 'warning');
+        }
+        if (Object.keys(targetState).length === 0) throw new Error("Aucun fichier PWA trouvé.");
+        const currentState = await getCurrentState(owner, repo, branch, token);
+        for (const f of Object.keys(targetState)) {
+            const cur = currentState[f];
+            await restoreFile(owner, repo, f, targetState[f], cur ? cur.sha : null, branch, token, logRepo);
+        }
+        let problems = 0;
+        for (const f of Object.keys(targetState)) {
+            await new Promise(r => setTimeout(r, 500));
+            const after = await getFileAtCommit(owner, repo, f, branch, token);
+            if (!after || normalize(after.content) !== normalize(targetState[f])) problems++;
+            else addLog(logRepo, `${f} vérifié ✓`, 'success');
+        }
+        if (problems === 0) addLog(logRepo, "Rollback complet réussi.", 'success');
+        else addLog(logRepo, `Rollback effectué (${problems} fichier(s) en cache).`, 'warning');
+        return true;
+    }
+    async function revertToPreviousCommit(owner, repo, defaultBranch) {
+        const token = localStorage.getItem('hubcode_token');
+        if (!token) { showNotification("Token manquant", "danger"); return; }
+        clearTracker(repo);
+        disableBackBtn(repo, true);
+        setActivityState(true, `ROLLBACK ${repo}`);
+        addLog(repo, `Début rollback pour ${owner}/${repo}`, 'step');
+        try {
+            const commitsResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=6`, {
+                headers: { 'Authorization': `token ${token}` } });
+            if (!commitsResp.ok) throw new Error(`HTTP ${commitsResp.status}`);
+            const commits = await commitsResp.json();
+            if (commits.length < 2) throw new Error("Moins de 2 commits.");
+            const currentState = await getCurrentState(owner, repo, defaultBranch, token);
+            let targetCommit = null;
+            for (let i = 1; i < commits.length; i++) {
+                const c = commits[i];
+                let diffFound = false;
+                for (const f of PWA_FILES) {
+                    const tf = await getFileAtCommit(owner, repo, f, c.sha, token);
+                    const cf = currentState[f];
+                    const tn = tf ? normalize(tf.content) : null;
+                    const cn = cf ? normalize(cf.content) : null;
+                    if (tn !== cn) diffFound = true;
+                }
+                if (diffFound) { targetCommit = c; addLog(repo, `Commit ${c.sha.substring(0,7)} sélectionné.`, 'success'); break; }
+            }
+            if (!targetCommit) { addLog(repo, "❌ Aucun commit antérieur différent trouvé.", 'error'); return; }
+            await rollbackToCommit(owner, repo, defaultBranch, targetCommit.sha, token, repo);
+            try {
+                const rb = await fetch(`https://api.github.com/repos/${owner}/${repo}/pages/builds`, { method: 'POST', headers: { 'Authorization': `token ${token}` } });
+                if (rb.ok) addLog(repo, "Rebuild déclenché ✓", 'success');
+            } catch(e) {}
+            let deployed = false;
+            for (let i=1; i<=15; i++) {
+                await new Promise(r => setTimeout(r, 5000));
+                const pages = await fetch(`https://api.github.com/repos/${owner}/${repo}/pages`, { headers: { 'Authorization': `token ${token}` } });
+                if (pages.ok) {
+                    const data = await pages.json();
+                    if (data.status === 'built') { deployed = true; addLog(repo, "✅ Build terminé !", 'success'); break; }
+                } else if (pages.status === 404) { deployed = true; break; }
+            }
+            const url = `https://${owner.toLowerCase()}.github.io/${repo}/?t=${Date.now()}`;
+            if (deployed) addLog(repo, `🎉 Rollback effectif ! ${url}`, 'success');
+            else addLog(repo, `⚠️ Code restauré, déploiement lent. ${url}`, 'warning');
+            showNotification(`Rollback ${repo} terminé`, 'success');
+        } catch(err) {
+            addLog(repo, `ERREUR : ${err.message}`, 'error');
+            showNotification(`Rollback échoué : ${err.message}`, 'danger');
+        } finally {
+            disableBackBtn(repo, false);
+            setActivityState(false);
+        }
+    }
+
     function viewLivePage(owner, repo) {
         window.open(`https://${owner.toLowerCase()}.github.io/${repo}/?t=${Date.now()}`, '_blank');
     }
 
-    // ---------- SERVICE WORKER ----------
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(e => console.log("SW not available")));
     }
